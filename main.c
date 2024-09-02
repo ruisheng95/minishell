@@ -127,6 +127,8 @@ void	init_data_struct(t_data *data, char **envp)
 {
 	data->envp = malloc(sizeof(char *) * (total_strings(envp) + 1));
 	malloc_dup_env(data->envp, envp);
+	data->saved_in_fd = dup(0);
+	data->saved_out_fd = dup(1);
 }
 int main(int argc, char **argv, char **envp) 
 {

@@ -121,16 +121,25 @@ void	identify_tokens_list2(t_tokens *list)
 		{
 			if(list->type != string) 
 			{
-				if(list->type == redir_input)
-					list->next->type = infile;
-				else if(list->type == redir_out_append)
-					list->next->type = outfile_append;
-				else if(list->type == redir_out_overwrite)
-					list->next->type = outfile_overwrite;
+				if(list->type == redir_input && list->next)
+				{
+						list->next->type = infile;
+				}
+				else if(list->type == redir_out_append && list->next)
+				{	
+						list->next->type = outfile_append;
+				}
+				else if(list->type == redir_out_overwrite && list->next)
+				{
+						list->next->type = outfile_overwrite;
+				}
 				if(list->type != Pipe)
 				{
-					list = list->next;
-					list = list->next;
+					if(list->next && list->next->next)
+					{
+						list = list->next;
+						list = list->next;
+					}
 				}
 			}
 			if(list->type == string)
@@ -138,7 +147,7 @@ void	identify_tokens_list2(t_tokens *list)
 		}
 		else
 		{
-			if(list->type == string && list->prev->type == Pipe)
+			if(list->type == string && list->prev && list->prev->type == Pipe)
 				list->type = command;
 			else if(list->type == string && list->prev && list->prev->type == redir_input)
 				list->type = infile;
@@ -224,21 +233,21 @@ void	print_token_array(char **str)
 	}
 }
 
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_tokens *list;
-// 	char *str = "echo \"$USER\"";
-// 	t_data data;
-// 	data.tokens = lexer(str,envp);
-// 	print_token_array(data.tokens);
-// 	printf("-----------------------------------\n");
-// 	list = init_token_list(&data);
-// 	identify_tokens_list(list);
-// 	identify_tokens_list2(list);
-// 	if(check_valid_list(list) == 1)
-// 		exit(1);
-// 	print_tokens_list(list);
-// }
+int	main(int argc, char **argv, char **envp)
+{
+	t_tokens *list;
+	char *str = "|";
+	t_data data;
+	data.tokens = lexer(str,envp);
+	print_token_array(data.tokens);
+	printf("-----------------------------------\n");
+	list = init_token_list(&data);
+	identify_tokens_list(list);
+	identify_tokens_list2(list);
+	if(check_valid_list(list) == 1)
+		exit(1);
+	print_tokens_list(list);
+}
 
 // int main(int argc, char **argv, char **envp)
 // {

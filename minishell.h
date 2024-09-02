@@ -97,8 +97,20 @@ typedef struct s_data
 	char	**envp;
 	char	*input_line;
 	char	**tokens;
+	int		saved_in_fd;
+	int		saved_out_fd;
 	t_node	*instr_list;
 }	t_data;
+
+typedef struct s_cmd_list
+{
+	char **cmd;
+	int in_fd;
+	int	out_fd;
+
+	struct s_cmd_list *next;
+	struct s_cmd_list *prev;
+}	t_cmd_list;
 
 extern void rl_replace_line(const char *, int);
 char **lexer(char *line, char **envp);
