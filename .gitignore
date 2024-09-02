@@ -1,0 +1,7 @@
+*.o
+a.out
+*.a
+outfile
+testfile
+.DS_Store
+minishell
