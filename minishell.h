@@ -9,6 +9,8 @@
 #include "libft/libft.h"
 #include <string.h>
 #include <limits.h>
+#include <signal.h>
+#include <wait.h>
 
 
 #define string 1

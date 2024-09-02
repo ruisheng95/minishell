@@ -90,7 +90,7 @@ int buildins(char **cmd, t_data **data)
 int	execute(char **cmd, t_data **data)
 {
 	char	*path;
-	int		*exit_status;
+	int		exit_status;
 	pid_t	pid;
 
 	if (ft_strcmp(cmd[0], "echo") == 0 ||
@@ -118,8 +118,8 @@ int	execute(char **cmd, t_data **data)
 		return(execve(path, cmd, (*data)->envp));
 	}
 	else
-		waitpid(pid, exit_status, 0);
+		waitpid(pid, &exit_status, 0);
 	// if (execve(path, cmd, envp) == -1)
 	// 	exit_error(0);
-	return(*exit_status);
+	return(exit_status);
 }
