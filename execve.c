@@ -108,6 +108,7 @@ int	execute(char **cmd, t_data **data)
 		exit_error(0);
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		// cmd = lexer(argv, envp);
 		if (cmd[0][0] == '.' && cmd[0][1] == '/')
 			path = ft_strdup(cmd[0]);

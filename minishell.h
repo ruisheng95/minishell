@@ -112,7 +112,7 @@ typedef struct s_cmd_list
 	struct s_cmd_list *prev;
 }	t_cmd_list;
 
-extern void rl_replace_line(const char *, int);
+// extern void rl_replace_line(const char *, int);
 char **lexer(char *line, char **envp);
 
 //expansion

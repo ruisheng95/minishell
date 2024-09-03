@@ -1,11 +1,12 @@
 #include "minishell.h"
 
+int	set_terminos_echo(int);
+
 void	signal_handler(int sig)
 {
-	write(1,"^C",2);
+	ft_printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	write(0,"\n",1);
 	rl_redisplay();
 }
 
@@ -90,6 +91,7 @@ int	run(char *line, t_data *data)
 
 	data->input_line = line;
 	data->tokens = lexer(line, data->envp);
+	signal(SIGINT, SIG_IGN);
 	// process_tokens(&data);
 	if (data->tokens == NULL)
 	{
@@ -126,10 +128,11 @@ int main(int argc, char **argv, char **envp)
 	char	*readline_prompt;
 
 	init_data_struct(&data, envp);
-	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
+	set_terminos_echo(0);
     while (1)
 	{
+		signal(SIGINT, signal_handler);
 		readline_prompt = get_readline_prompt(envp);
     	line = readline("Minishell$");
 		if (line == NULL)
@@ -145,5 +148,6 @@ int main(int argc, char **argv, char **envp)
 			run(line, &data);
 		}
     }
+	set_terminos_echo(1);
     return 0;
 }
