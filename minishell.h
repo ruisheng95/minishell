@@ -172,4 +172,7 @@ int export(char ***env, char *str);
 int unset(char ***env, char *str);
 void	print_env(char **env);
 char **unset_array(char **env, char *str);
+
+//cmdlist
+t_cmd_list *make_command_list(t_node *list);
 #endif

@@ -117,37 +117,13 @@ void	identify_tokens_list2(t_tokens *list)
 		return ;
 	while(list)
 	{
-		if(list == first_token)
+		if(list == first_token && list->type == string)
 		{
-			if(list->type != string) 
-			{
-				if(list->type == redir_input && list->next)
-				{
-						list->next->type = infile;
-				}
-				else if(list->type == redir_out_append && list->next)
-				{	
-						list->next->type = outfile_append;
-				}
-				else if(list->type == redir_out_overwrite && list->next)
-				{
-						list->next->type = outfile_overwrite;
-				}
-				if(list->type != Pipe)
-				{
-					if(list->next && list->next->next)
-					{
-						list = list->next;
-						list = list->next;
-					}
-				}
-			}
-			if(list->type == string)
-				list->type = command;
+			list->type = command;
 		}
 		else
 		{
-			if(list->type == string && list->prev && list->prev->type == Pipe)
+			if(list->type == string && list->prev && (list->prev->type == Pipe || list->prev->type == infile || list->prev->type == outfile_append || list->prev->type == outfile_overwrite))
 				list->type = command;
 			else if(list->type == string && list->prev && list->prev->type == redir_input)
 				list->type = infile;
@@ -233,21 +209,21 @@ void	print_token_array(char **str)
 	}
 }
 
-int	main(int argc, char **argv, char **envp)
-{
-	t_tokens *list;
-	char *str = "|";
-	t_data data;
-	data.tokens = lexer(str,envp);
-	print_token_array(data.tokens);
-	printf("-----------------------------------\n");
-	list = init_token_list(&data);
-	identify_tokens_list(list);
-	identify_tokens_list2(list);
-	if(check_valid_list(list) == 1)
-		exit(1);
-	print_tokens_list(list);
-}
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_tokens *list;
+// 	char *str = ">>file1 >>file2 cat";
+// 	t_data data;
+// 	data.tokens = lexer(str,envp);
+// 	print_token_array(data.tokens);
+// 	printf("-----------------------------------\n");
+// 	list = init_token_list(&data);
+// 	identify_tokens_list(list);
+// 	identify_tokens_list2(list);
+// 	if(check_valid_list(list) == 1)
+// 		exit(1);
+// 	print_tokens_list(list);
+// }
 
 // int main(int argc, char **argv, char **envp)
 // {

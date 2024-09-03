@@ -65,36 +65,23 @@ t_tokens*	process_tokens(t_data *data)
 }
 int the_real_actual_main(t_data *data)
 {
-    t_node *list;
-	pid_t pid;
-
-    list = data->instr_list;
-	// print_final_list(list);
-    while (list)
-    {
-        if (list->type == s_command)
-        {
-            if (list->prev && list->prev->type == Pipe)
-            {
-                dup2(list->prev->piping.pipe_fd[0], 0);
-            }
-            if (list->next && list->next->type == Pipe)
-            {
-                dup2(list->prev->piping.pipe_fd[1], 1);
-            }
-            if (list->next && list->next->type == redir_input)
-            {
-                dup2(list->next->redir_in.fd, 0);
-            }
-            if (list->next && (list->next->type == redir_out_append || list->next->type == redir_out_overwrite))
-            {
-                dup2(list->next->redir_out.fd, 1);
-            }
-            execute(list->simple_cmd.array, &data);
-        }
-        list = list->next;
-    }
-    return 0;
+	t_cmd_list *cmdlist = make_command_list(data->instr_list);
+	t_cmd_list *templist = cmdlist;
+	while(templist)
+	{
+		dup2(templist->in_fd, 0);
+		dup2(templist->out_fd, 1);
+		if(templist->in_fd != 0)
+			close(templist->in_fd);
+		if(templist->out_fd != 1)
+			close(templist->out_fd);
+		if(execute(templist->cmd, &data) == -1)
+			return -1;
+		dup2(data->saved_in_fd, 0);
+		dup2(data->saved_out_fd, 1);
+		templist = templist->next;
+	}
+	return 0;
 }
 int	run(char *line, t_data *data)
 {
@@ -120,6 +107,7 @@ int	run(char *line, t_data *data)
 	// print_final_list(data.instr_list);
 	if(data->instr_list != NULL)
 		the_real_actual_main(data);
+	
 	return 0;
 }
 

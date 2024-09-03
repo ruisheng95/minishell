@@ -84,7 +84,7 @@ t_node	*make_final_list(t_tokens *tokens)
 			if(token->next->type == outfile_append)
 			{
 				newnode->redir_out.outfile = token->next->token;
-				newnode->redir_out.fd = open(newnode->redir_out.outfile, O_WRONLY | O_CREAT, 0777);
+				newnode->redir_out.fd = open(newnode->redir_out.outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
 				token = token->next;
 				token = token->next;
 			}
@@ -181,21 +181,21 @@ void	print_final_list(t_node *list)
 		printf("\n");
 	}
 }
-int	main(int argc, char **argv, char **envp)
-{
-	t_tokens *list;
-	t_node	*final_list;
-	char *str = ">>";
-	t_data data;
-	data.tokens = lexer(str,envp);
-	// print_token_array(data.tokens);
-	printf("-----------------------------------\n");
-	list = init_token_list(&data);
-	identify_tokens_list(list);
-	identify_tokens_list2(list);
-	if(check_valid_list(list) == 1)
-		exit(1);
-	// print_tokens_list(list);
-	final_list = make_final_list(list);
-	print_final_list(final_list);
-}
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_tokens *list;
+// 	t_node	*final_list;
+// 	char *str = ">> file1 >>file2 cat";
+// 	t_data data;
+// 	data.tokens = lexer(str,envp);
+// 	// print_token_array(data.tokens);
+// 	printf("-----------------------------------\n");
+// 	list = init_token_list(&data);
+// 	identify_tokens_list(list);
+// 	identify_tokens_list2(list);
+// 	if(check_valid_list(list) == 1)
+// 		exit(1);
+// 	// print_tokens_list(list);
+// 	final_list = make_final_list(list);
+// 	print_final_list(final_list);
+// }
