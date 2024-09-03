@@ -93,7 +93,7 @@ int	run(char *line, t_data *data)
 	// process_tokens(&data);
 	if (data->tokens == NULL)
 	{
-		free(data->envp);
+		// free(data->envp);
 		return 1;
 	}
 	list = init_token_list(data);
@@ -131,7 +131,7 @@ int main(int argc, char **argv, char **envp)
     while (1)
 	{
 		readline_prompt = get_readline_prompt(envp);
-    	line = readline(readline_prompt);
+    	line = readline("Minishell$");
 		if (line == NULL)
 		{
 			write(1,"exit\n",5);
