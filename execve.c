@@ -32,8 +32,15 @@ char	*get_path(char **envp, char *cmd)
 	char	*temp;
 
 	i = 0;
-	while (ft_strncmp(envp[i], "PATH", 4) != 0)
+	while (envp[i] && ft_strncmp(envp[i], "PATH", 4) != 0)
 		i++;
+	if(!envp[i])
+	{
+		write(2, "Error: ", 7);
+		write(2, cmd, ft_strlen(cmd));
+		write(2, ": No such file or directory\n", 29);
+		return NULL;
+	}
 	paths_string = ft_substr(envp[i], 5, ft_strlen(envp[i]));
 	paths_list = ft_split(paths_string, ':');
 	i = -1;
@@ -118,6 +125,8 @@ int	execute(char **cmd, t_data **data)
 			path = ft_strdup(cmd[0]);
 		else
 			path = get_path((*data)->envp, cmd[0]);
+		if(!path)
+			exit(1);
 		return(execve(path, cmd, (*data)->envp));
 	}
 	else
