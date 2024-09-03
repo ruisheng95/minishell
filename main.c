@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-int	set_terminos_echo(int);
-
 void	signal_handler(int sig)
 {
 	ft_printf("\n");
@@ -129,11 +127,11 @@ int main(int argc, char **argv, char **envp)
 
 	init_data_struct(&data, envp);
 	signal(SIGQUIT, SIG_IGN);
-	set_terminos_echo(0);
     while (1)
 	{
 		signal(SIGINT, signal_handler);
 		readline_prompt = get_readline_prompt(envp);
+		set_terminos_echo(0);
     	line = readline("Minishell$");
 		if (line == NULL)
 		{

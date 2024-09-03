@@ -108,7 +108,9 @@ int	execute(char **cmd, t_data **data)
 		exit_error(0);
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
+		set_terminos_echo(1);
 		// cmd = lexer(argv, envp);
 		if (cmd[0][0] == '.' && cmd[0][1] == '/')
 			path = ft_strdup(cmd[0]);
@@ -122,5 +124,9 @@ int	execute(char **cmd, t_data **data)
 		waitpid(pid, &exit_status, 0);
 	// if (execve(path, cmd, envp) == -1)
 	// 	exit_error(0);
+	if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGQUIT)
+		ft_printf("Quit\n");
+	else if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGINT)
+		ft_printf("\n");
 	return(exit_status);
 }
