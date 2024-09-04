@@ -174,7 +174,7 @@ int total_strings(char **env);
 int export(char ***env, char **str);
 
 //unset
-int unset(char ***env, char *str);
+int unset(char ***env, char **str);
 void	print_env(char **env);
 char **unset_array(char **env, char *str);
 

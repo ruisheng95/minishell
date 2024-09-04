@@ -70,7 +70,7 @@ int buildins(char **cmd, t_data **data)
 	}
 	if(ft_strcmp(cmd[0], "unset") == 0)
 	{
-		return(unset(&(*data)->envp, cmd[1]));
+		return(unset(&(*data)->envp, cmd));
 	}
 	if(ft_strcmp(cmd[0], "env") == 0)
 	{

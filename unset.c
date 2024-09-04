@@ -26,13 +26,21 @@ char **unset_array(char **env, char *str)
 	return tempenv;
 }
 
-int unset(char ***env, char *str)
+int unset(char ***env, char **str)
 {
+	char	**tempenv;
+	int		i;
+
+	i = 0;
 	if(!str)
 		return 0;
-	char **tempenv = unset_array(*env, str);
-	free_2d_array(*env);
-	*env = tempenv;
+	while(str[i])
+	{
+		tempenv = unset_array(*env, str[i]);
+		free_2d_array(*env);
+		*env = tempenv;
+		i++;
+	}
 	// print_env(*env);
 	return 0;
 }
