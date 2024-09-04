@@ -2,15 +2,20 @@
 
 char **unset_array(char **env, char *str)
 {
-	char **tempenv = malloc((total_strings(env) + 1) * sizeof(char *));
+	char **tempenv;
+	char	*s;
 	int i;
 	int j;
 
 	i = 0;
 	j = 0;
+	tempenv = malloc((total_strings(env) + 1) * sizeof(char *));
+	s = ft_strjoin(str, "=");
+	if(!tempenv)
+		return NULL;
 	while(env[i])
 	{
-		if(ft_strncmp(env[i], str, ft_strlen(str)) != 0)
+		if(ft_strncmp(env[i], s, ft_strlen(s)) != 0)
 		{
 			tempenv[j] = ft_strdup(env[i]);
 			j++;
@@ -23,6 +28,8 @@ char **unset_array(char **env, char *str)
 
 int unset(char ***env, char *str)
 {
+	if(!str)
+		return 0;
 	char **tempenv = unset_array(*env, str);
 	free_2d_array(*env);
 	*env = tempenv;
