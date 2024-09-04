@@ -112,7 +112,7 @@ typedef struct s_cmd_list
 	struct s_cmd_list *prev;
 }	t_cmd_list;
 
-// extern void rl_replace_line(const char *, int);
+extern void rl_replace_line(const char *, int);
 char **lexer(char *line, char **envp);
 
 //expansion
@@ -167,7 +167,7 @@ void	print_final_list(t_node *list);
 //export
 void	malloc_dup_env(char **dest, char **env);
 int total_strings(char **env);
-int export(char ***env, char *str);
+int export(char ***env, char **str);
 
 //unset
 int unset(char ***env, char *str);

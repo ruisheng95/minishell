@@ -66,7 +66,7 @@ int buildins(char **cmd, t_data **data)
 	}
 	if(ft_strcmp(cmd[0], "export") == 0)
 	{
-		return(export(&(*data)->envp, cmd[1]));
+		return(export(&(*data)->envp, cmd));
 	}
 	if(ft_strcmp(cmd[0], "unset") == 0)
 	{
