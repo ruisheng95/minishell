@@ -94,12 +94,34 @@ int buildins(char **cmd, t_data **data)
 	}
 	return 1;
 }
+
+void	here_doc_gnl(char *lim)
+{
+	char	*str;
+	size_t	len;
+
+	str = get_next_line(STDIN_FILENO);
+	while (str)
+	{
+		len = ft_strlen(lim);
+		if (ft_strlen(str) - 1 > len)
+			len = ft_strlen(str);
+		if (!ft_strncmp(str, lim, len))
+			return (free(str));
+		write(STDOUT_FILENO, str, ft_strlen(str));
+		free(str);
+		str = get_next_line(STDIN_FILENO);
+	}
+}
+
 int	execute(char **cmd, t_data **data)
 {
 	char	*path;
 	int		exit_status;
 	pid_t	pid;
 
+	if (ft_strcmp(cmd[0], heredoc_cmd) == 0)
+		return (here_doc_gnl(cmd[1]), 0);
 	if (ft_strcmp(cmd[0], "echo") == 0 ||
 		ft_strcmp(cmd[0], "pwd") == 0 ||
 		ft_strcmp(cmd[0], "env") == 0 ||

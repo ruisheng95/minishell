@@ -108,6 +108,20 @@ t_node	*make_final_list(t_tokens *tokens)
 				printf("outfile redir error");
 			}
 		}
+		else if(token->type == heredoc)
+		{
+			newnode->type = heredoc;
+			if(token->next->type == heredoc_lim)
+			{
+				newnode->heredoc_obj.limiter = token->next->token;
+				token = token->next;
+				token = token->next;
+			}
+			else
+			{
+				printf("heredoc error");
+			}
+		}
 		else if(token->type == command)
 		{
 			newnode->type = s_command;

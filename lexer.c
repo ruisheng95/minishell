@@ -123,7 +123,8 @@ void	identify_tokens_list2(t_tokens *list)
 		}
 		else
 		{
-			if(list->type == string && list->prev && (list->prev->type == Pipe || list->prev->type == infile || list->prev->type == outfile_append || list->prev->type == outfile_overwrite))
+			if(list->type == string && list->prev && (list->prev->type == Pipe || list->prev->type == infile || list->prev->type == outfile_append || list->prev->type == outfile_overwrite
+				|| list->prev->type == heredoc_lim))
 				list->type = command;
 			else if(list->type == string && list->prev && list->prev->type == redir_input)
 				list->type = infile;
@@ -131,6 +132,8 @@ void	identify_tokens_list2(t_tokens *list)
 				list->type = outfile_overwrite;
 			else if(list->type == string && list->prev && list->prev->type == redir_out_append)
 				list->type = outfile_append;
+			else if(list->type == string && list->prev && list->prev->type == heredoc)
+				list->type = heredoc_lim;
 			else if(list->type == string)
 				list->type = arguments;
 		}

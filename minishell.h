@@ -29,8 +29,11 @@
 #define infile 23
 #define outfile_overwrite 24
 #define outfile_append 25
+#define heredoc_lim 26
 //-----------------------------------------
 #define s_command 31
+
+#define heredoc_cmd "haha_heredoc_XD"
 
 typedef struct s_lexing
 {
@@ -87,6 +90,7 @@ typedef struct s_node
 	t_redir_in redir_in;
 	t_redir_out redir_out;
 	t_pipe piping;
+	t_heredoc heredoc_obj;
 
 	struct s_node *next;
 	struct s_node *prev;
