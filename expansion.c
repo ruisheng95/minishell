@@ -13,7 +13,7 @@ char	*get_expand_string(char *str, char **envp)
 	return temp;
 }
 
-char	*expansion(char *line, char **envp)
+char	*expansion(char *line, t_lexing *lexer)
 {
 	int i;
 	int start;
@@ -32,11 +32,17 @@ char	*expansion(char *line, char **envp)
 			start = j + 1;
 			if(line[start] == '\0')
 				res[i] = '$';
+			if(line[start] == '?')
+			{
+				res[i] = lexer->exit_code + 48;
+				i++;
+				j += 2;
+			}
 			else
 			{
 				while(line[j] && line[j] != ' ')
 					j++;
-				temp = get_expand_string(ft_substr(line, start, j - start), envp);
+				temp = get_expand_string(ft_substr(line, start, j - start), lexer->envp);
 				if (temp != NULL)
 				{
 					k = 0;

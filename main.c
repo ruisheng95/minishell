@@ -74,8 +74,8 @@ int the_real_actual_main(t_data *data)
 			close(templist->in_fd);
 		if(templist->out_fd != 1)
 			close(templist->out_fd);
-		if(execute(templist->cmd, &data) == -1)
-			return -1;
+		if(execute(templist->cmd, &data) != 0)
+			return 1;
 		dup2(data->saved_in_fd, 0);
 		dup2(data->saved_out_fd, 1);
 		templist = templist->next;
@@ -88,7 +88,7 @@ int	run(char *line, t_data *data)
 	pid_t	pid;
 
 	data->input_line = line;
-	data->tokens = lexer(line, data->envp);
+	data->tokens = lexer(line, data);
 	signal(SIGINT, SIG_IGN);
 	// process_tokens(&data);
 	if (data->tokens == NULL)
@@ -99,7 +99,8 @@ int	run(char *line, t_data *data)
 	list = init_token_list(data);
 	identify_tokens_list(list);
 	identify_tokens_list2(list);
-	if(check_valid_list(list) == 1)
+	data->exit_code = check_valid_list(list);
+	if(data->exit_code == 1)
 		return(1);
 	// printf("----------------------");
 	data->instr_list = make_final_list(list);
@@ -107,8 +108,9 @@ int	run(char *line, t_data *data)
 	// execute(data.tokens, data.envp);
 	// print_final_list(data.instr_list);
 	if(data->instr_list != NULL)
-		the_real_actual_main(data);
-	
+	{
+		data->exit_code = the_real_actual_main(data);
+	}
 	return 0;
 }
 
@@ -118,7 +120,9 @@ void	init_data_struct(t_data *data, char **envp)
 	malloc_dup_env(data->envp, envp);
 	data->saved_in_fd = dup(0);
 	data->saved_out_fd = dup(1);
+	data->exit_code = 0;
 }
+
 int main(int argc, char **argv, char **envp) 
 {
 	pid_t	pid;

@@ -28,13 +28,13 @@ int handle_quotes(char *line, int i)
 	return i;
 }
 
-char	*substr_expand(char *line, char **envp, int i, int start)
+char	*substr_expand(char *line, t_lexing *lexer, int i, int start)
 {
 	char *res;
 	char *temp;
 
 	temp = ft_substr(line, start, i - start);
-	res = expansion(temp, envp);
+	res = expansion(temp, lexer);
 	free(temp);
 	return res;
 }
@@ -55,7 +55,7 @@ int	lexer_helper1(t_lexing *lexer)
 			return -1;
 		else
 			lexer->i = handle_quotes(lexer->line, lexer->i) + 1;
-		lexer->res[lexer->j] = substr_expand(lexer->line, lexer->envp, lexer->i, lexer->start);
+		lexer->res[lexer->j] = substr_expand(lexer->line, lexer, lexer->i, lexer->start);
 	}
 	return 0;
 }
@@ -82,7 +82,7 @@ int lexer_helper3(t_lexing *lexer)
 			&& lexer->line[lexer->i] != '|' && lexer->line[lexer->i] != '>' && lexer->line[lexer->i] != '<'
 			&& lexer->line[lexer->i] != '\'' && lexer->line[lexer->i] != '\"')
 				lexer->i++;
-		lexer->res[lexer->j] = substr_expand(lexer->line, lexer->envp, lexer->i, lexer->start);
+		lexer->res[lexer->j] = substr_expand(lexer->line, lexer, lexer->i, lexer->start);
 	return 0;
 }
 
@@ -111,13 +111,14 @@ int	count_lexer_array(char *line)
 	return count;
 }
 
-int	init_lexer_struct(t_lexing *lexer, char **envp, char *line)
+int	init_lexer_struct(t_lexing *lexer, t_data *data, char *line)
 {
-	lexer->envp = envp;
+	lexer->envp = data->envp;
 	lexer->line = line;
 	lexer->i = 0;
 	lexer->start = 0;
 	lexer->j = 0;
+	lexer->exit_code = data->exit_code;
 	lexer->res = malloc(sizeof(char *) * count_lexer_array(line) + 1);
 	if (!lexer->res)
 	{

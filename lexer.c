@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-char **lexer(char *line, char **envp)
+char **lexer(char *line, t_data *data)
 {
 	t_lexing lexer;
 
 	if(!line || line[0] == '\0')
 		return NULL;
-	if (init_lexer_struct(&lexer, envp, line) == 1)
+	if (init_lexer_struct(&lexer, data, line) == 1)
 		return NULL;
 	while (lexer.line[lexer.i])
 	{

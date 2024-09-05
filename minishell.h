@@ -43,6 +43,7 @@ typedef struct s_lexing
 	int i;
 	char **envp;
 	int j;
+	int	exit_code;
 }	t_lexing;
 
 typedef struct s_token
@@ -68,9 +69,9 @@ typedef struct s_redir_out
 
 typedef struct s_redir_in
 {
-	char *in_file;
-	int fd;
-	int here_doc;
+	char	*in_file;
+	int		fd;
+	int		here_doc;
 } t_redir_in;
 
 typedef struct s_pipe
@@ -80,17 +81,17 @@ typedef struct s_pipe
 
 typedef struct s_heredoc
 {
-	char *limiter;
+	char	*limiter;
 } t_heredoc;
 
 typedef struct s_node
 {
-	int type;
-	t_simple_command simple_cmd;
-	t_redir_in redir_in;
-	t_redir_out redir_out;
-	t_pipe piping;
-	t_heredoc heredoc_obj;
+	int					type;
+	t_simple_command	simple_cmd;
+	t_redir_in			redir_in;
+	t_redir_out			redir_out;
+	t_pipe				piping;
+	t_heredoc			heredoc_obj;
 
 	struct s_node *next;
 	struct s_node *prev;
@@ -103,6 +104,7 @@ typedef struct s_data
 	char	**tokens;
 	int		saved_in_fd;
 	int		saved_out_fd;
+	int		exit_code;
 	t_node	*instr_list;
 }	t_data;
 
@@ -117,12 +119,12 @@ typedef struct s_cmd_list
 }	t_cmd_list;
 
 extern void rl_replace_line(const char *, int);
-char **lexer(char *line, char **envp);
+char **lexer(char *line, t_data *data);
 
 //expansion
 char	*get_expand_string(char *str, char **envp);
 
-char	*expansion(char *line, char **envp);
+char	*expansion(char *line, t_lexing *lexer);
 
 //utils
 void	free_2d_array(char **str);
@@ -136,11 +138,10 @@ int		execute(char **cmd, t_data **data);
 
 //lexer2
 int handle_quotes(char *line, int i);
-char	*substr_expand(char *line, char **envp, int i, int start);
 int	lexer_helper1(t_lexing *lexer);
 int	lexer_helper2(t_lexing *lexer);
 int lexer_helper3(t_lexing *lexer);
-int	init_lexer_struct(t_lexing *lexer, char **envp, char *line);
+int	init_lexer_struct(t_lexing *lexer, t_data *data, char *line);
 
 
 //parse_list
@@ -165,7 +166,6 @@ int check_operator(int n);
 void	identify_tokens_list2(t_tokens *list);
 void	identify_tokens_list(t_tokens *tokens);
 t_tokens* init_token_list(t_data *data);
-char **lexer(char *line, char **envp);
 void print_tokens_list(t_tokens *list);
 void	print_final_list(t_node *list);
 
