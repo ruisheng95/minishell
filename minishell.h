@@ -145,6 +145,7 @@ int	init_lexer_struct(t_lexing *lexer, char **envp, char *line);
 
 //parse_list
 t_node	*make_final_list(t_tokens *tokens);
+t_node	*make_final_list_heredoc(t_node *list);
 
 //pwd
 int	pwd(void);

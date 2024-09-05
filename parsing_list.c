@@ -161,6 +161,48 @@ t_node	*make_final_list(t_tokens *tokens)
 	return list;
 }
 
+t_node	*make_final_list_heredoc(t_node *list)
+{
+	t_node	*head_node;
+	t_node	*heredoc_node;
+	t_node 	*newnode;
+
+	head_node = list;
+	while (list)
+	{
+		if (list->type == heredoc)
+		{
+			if (!list->prev && !list->next)
+			{
+				newnode = malloc(sizeof(t_node));
+				newnode->type = s_command;
+				newnode->simple_cmd.cmd = ft_strdup("true");
+				newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
+				newnode->simple_cmd.array[0] = ft_strdup("true");
+				newnode->simple_cmd.array[1] = 0;
+				list->next = newnode;
+				newnode->prev = list;
+				newnode->next = 0;
+			}
+			else if (!list->prev && list->next && list->next->type != s_command)
+			{
+				newnode = malloc(sizeof(t_node));
+				newnode->type = s_command;
+				newnode->simple_cmd.cmd = ft_strdup("true");
+				newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
+				newnode->simple_cmd.array[0] = ft_strdup("true");
+				newnode->simple_cmd.array[1] = 0;
+				list->next->prev = newnode;
+				newnode->next = list->next;
+				newnode->prev = list;
+				list->next = newnode;
+			}
+		}
+		list = list->next;
+	}
+	return (head_node);
+}
+
 void	print_final_list(t_node *list)
 {
 	while(list)
@@ -190,6 +232,10 @@ void	print_final_list(t_node *list)
 		if (list->type == Pipe)
 		{
 			printf("pipe fd[0] = %d, fd[1] = %d", list->piping.pipe_fd[0], list->piping.pipe_fd[1]);
+		}
+		if (list->type == heredoc)
+		{
+			printf("heredoc lim: %s", list->heredoc_obj.limiter);
 		}
 		list = list->next;
 		printf("\n");

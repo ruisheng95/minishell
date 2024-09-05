@@ -45,7 +45,8 @@ t_cmd_list *make_command_list(t_node *list)
 	while(templist)
 	{
 		newnode = malloc(sizeof(t_cmd_list));
-		while(templist->type != s_command && templist)
+		newnode->cmd = 0;
+		while(templist && templist->type != s_command)
 			templist = templist->next;
 		if(templist)
 		{
@@ -88,7 +89,8 @@ t_cmd_list *make_command_list(t_node *list)
 			newnode->prev = lastnode;
 		}
 		lastnode = newnode;
-		templist = templist->next;
+		if (templist)
+			templist = templist->next;
 	}
 	return head;
 }
@@ -96,7 +98,7 @@ t_cmd_list *make_command_list(t_node *list)
 void	print_cmd_list(t_cmd_list *list)
 {
 	t_cmd_list *templist = list;
-	while(templist)
+	while(templist && templist->cmd)
 	{
 		int i = 0;
 		while(templist->cmd[i])

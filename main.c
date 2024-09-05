@@ -66,7 +66,7 @@ int the_real_actual_main(t_data *data)
 {
 	t_cmd_list *cmdlist = make_command_list(data->instr_list);
 	t_cmd_list *templist = cmdlist;
-	while(templist)
+	while(templist && templist->cmd)
 	{
 		dup2(templist->in_fd, 0);
 		dup2(templist->out_fd, 1);
@@ -103,6 +103,7 @@ int	run(char *line, t_data *data)
 		return(1);
 	// printf("----------------------");
 	data->instr_list = make_final_list(list);
+	data->instr_list = make_final_list_heredoc(data->instr_list);
 	// execute(data.tokens, data.envp);
 	// print_final_list(data.instr_list);
 	if(data->instr_list != NULL)
