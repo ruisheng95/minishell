@@ -32,11 +32,14 @@ char	*expansion(char *line, t_lexing *lexer)
 			start = j + 1;
 			if(line[start] == '\0')
 				res[i] = '$';
-			if(line[start] == '?')
+			else if(line[start] == '?')
 			{
-				res[i] = lexer->exit_code + 48;
-				i++;
-				j += 2;
+				while(line[j] == '$' && line[j + 1] == '?')
+				{
+					res[i] = lexer->exit_code + 48;
+					i++;
+					j += 2;
+				}
 			}
 			else
 			{
