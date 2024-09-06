@@ -99,8 +99,10 @@ int	check_str(char *str)
 
 int export(char ***env, char **str)
 {
-	char **tempenv;
+	char	**tempenv;
+	char	*tempsubstr = NULL;
 	int	i;
+	int	j;
 
 	i = 1;
 	tempenv = malloc(sizeof(char *) * (total_strings(*env) + 2));
@@ -112,6 +114,8 @@ int export(char ***env, char **str)
 		{
 			if(ft_isdigit(str[i][0]) == 1 || check_str(str[i]) != 0)
 			{
+				if(tempsubstr)
+					free(tempsubstr);
 				free_2d_array(*env);
 				*env = tempenv;
 				if(check_str(str[i]) != 2)
@@ -120,10 +124,32 @@ int export(char ***env, char **str)
 					return 0;
 				return 1;
 			}
-			tempenv[total_strings(tempenv)] = ft_strdup(str[i]);
-			tempenv[total_strings(tempenv) + 1] = NULL;
+			j = 0;
+			while(str[i][j] && str[i][j] != '=')
+			{
+				j++;
+			}
+			tempsubstr = ft_substr(str[i], 0, j + 1);
+			j = 0;
+			while(tempenv[j])
+			{
+				if(ft_strncmp(tempenv[j], tempsubstr, ft_strlen(tempsubstr)) == 0)
+				{
+					free(tempenv[j]);
+					tempenv[j] = ft_strdup(str[i]);
+					break ;
+				}
+				j++;
+			}
+			if(tempenv[j] == NULL)
+			{
+				tempenv[j] = ft_strdup(str[i]);
+				tempenv[j + 1] = NULL; 
+			}
 			i++;
 		}
+		if(tempsubstr)
+			free(tempsubstr);
 		free_2d_array(*env);
 		*env = tempenv;
 		return 0;

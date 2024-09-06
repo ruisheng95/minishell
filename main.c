@@ -66,6 +66,7 @@ int the_real_actual_main(t_data *data)
 {
 	t_cmd_list *cmdlist = make_command_list(data->instr_list);
 	t_cmd_list *templist = cmdlist;
+	pid_t	pid;
 	while(templist && templist->cmd)
 	{
 		dup2(templist->in_fd, 0);
@@ -118,6 +119,7 @@ void	init_data_struct(t_data *data, char **envp)
 {
 	data->envp = malloc(sizeof(char *) * (total_strings(envp) + 1));
 	malloc_dup_env(data->envp, envp);
+	increment_shell_lvl(data);
 	data->saved_in_fd = dup(0);
 	data->saved_out_fd = dup(1);
 	data->exit_code = 0;

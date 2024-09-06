@@ -131,6 +131,9 @@ void	free_2d_array(char **str);
 void	print_2d_array(char **cmd);
 int		exit_process();
 int		set_terminos_echo(int enable);
+void	increment_shell_lvl(t_data *data);
+void	change_env_oldpwd(t_data *data);
+void	change_env_pwd(t_data *data);
 
 //execve
 char	*get_path(char **envp, char *cmd);
@@ -158,7 +161,7 @@ int	echo(char **cmd);
 int	env(t_data *data);
 
 //cd
-int cd(char **cmd, char **envp);
+int cd(char **cmd, t_data *data);
 
 void	print_token_array(char **str);
 int	check_valid_list(t_tokens *list);

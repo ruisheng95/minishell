@@ -245,9 +245,10 @@ void	print_final_list(t_node *list)
 // {
 // 	t_tokens *list;
 // 	t_node	*final_list;
-// 	char *str = ">> file1 >>file2 cat";
+// 	char *str = "export a=\"dsf sdfdsf\"";
 // 	t_data data;
-// 	data.tokens = lexer(str,envp);
+// 	data.envp = envp;
+// 	data.tokens = lexer(str,&data);
 // 	// print_token_array(data.tokens);
 // 	printf("-----------------------------------\n");
 // 	list = init_token_list(&data);

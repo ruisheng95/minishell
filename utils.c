@@ -47,3 +47,73 @@ int	set_terminos_echo(int enable)
 		return (-1);
 	return (0);
 }
+
+void	increment_shell_lvl(t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while(data->envp[i])
+	{
+		if(ft_strncmp(data->envp[i], "SHLVL=", 6) == 0)
+		{
+			while(data->envp[i][j + 1])
+				j++;
+			data->envp[i][j] += 1;
+			return;
+		}
+		i++;
+	}
+	return ;
+}
+
+void	change_env_oldpwd(t_data *data)
+{
+	char	*oldpwd;
+	char	*newstr;
+	int		i;
+
+	i = 0;
+	oldpwd = getcwd(NULL, 0);
+	newstr = ft_strjoin("OLDPWD=", oldpwd);
+	while(data->envp[i])
+	{
+		if(ft_strncmp(data->envp[i], "OLDPWD=", 7) == 0)
+		{
+			free(data->envp[i]);
+			data->envp[i] = newstr;
+			return ;
+		}
+		i++;
+	}
+	if(!data->envp[i])
+		free(newstr);
+	return ;
+}
+
+void	change_env_pwd(t_data *data)
+{
+	char	*pwd;
+	char	*newstr;
+	int		i;
+
+	i = 0;
+	pwd = getcwd(NULL, 0);
+	newstr = ft_strjoin("PWD=", pwd);
+	while(data->envp[i])
+	{
+		if(ft_strncmp(data->envp[i], "PWD=", 4) == 0)
+		{
+			free(data->envp[i]);
+			data->envp[i] = newstr;
+			return ;
+		}
+		i++;
+	}
+	if(!data->envp[i])
+		free(newstr);
+	return ;
+}
+

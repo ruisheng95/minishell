@@ -28,7 +28,7 @@ int	echo(char **cmd)
 	while(cmd[i])
 	{
 		printf("%s", cmd[i]);
-		if (cmd[i + 1] != NULL)
+		if (cmd[i + 1] != NULL && cmd[i][0] != 0)
 			printf(" ");
 		i++;
 	}

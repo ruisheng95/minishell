@@ -60,9 +60,10 @@ char	*get_path(char **envp, char *cmd)
 
 int buildins(char **cmd, t_data **data)
 {
+	int	n;
 	if(ft_strcmp(cmd[0], "cd") == 0)
 	{
-		return(cd(cmd, (*data)->envp));
+		return(cd(cmd, *data));
 	}
 	if(ft_strcmp(cmd[0], "export") == 0)
 	{
@@ -142,7 +143,9 @@ int	execute(char **cmd, t_data **data)
 		set_terminos_echo(1);
 		// cmd = lexer(argv, envp);
 		if (cmd[0][0] == '.' && cmd[0][1] == '/')
+		{
 			path = ft_strdup(cmd[0]);
+		}
 		else if(cmd[0][0] == '/')
 			path = ft_strdup(cmd[0]);
 		else
