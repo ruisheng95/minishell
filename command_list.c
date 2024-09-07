@@ -46,6 +46,7 @@ t_cmd_list *make_command_list(t_node *list)
 	{
 		newnode = malloc(sizeof(t_cmd_list));
 		newnode->cmd = 0;
+		newnode->pid = 0;
 		while(templist && templist->type != s_command)
 			templist = templist->next;
 		if(templist)

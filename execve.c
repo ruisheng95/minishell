@@ -96,6 +96,14 @@ int buildins(char **cmd, t_data **data)
 	return 1;
 }
 
+void	prepare_fd(t_cmd_list *templist)
+{
+	dup2(templist->in_fd, 0);
+	dup2(templist->out_fd, 1);
+	for (int i = 3; i < 1000; i++)
+		close(i);
+}
+
 void	here_doc_gnl(char *lim)
 {
 	char	*str;
@@ -115,33 +123,30 @@ void	here_doc_gnl(char *lim)
 	}
 }
 
-int	execute(char **cmd, t_data **data)
+int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 {
 	char	*path;
-	int		exit_status;
 	pid_t	pid;
 
-	if (ft_strcmp(cmd[0], heredoc_cmd) == 0)
-		return (here_doc_gnl(cmd[1]), 0);
-	if (ft_strcmp(cmd[0], "echo") == 0 ||
-		ft_strcmp(cmd[0], "pwd") == 0 ||
-		ft_strcmp(cmd[0], "env") == 0 ||
-		ft_strcmp(cmd[0], "unset") == 0 ||
-		ft_strcmp(cmd[0], "export") == 0 ||
-		ft_strcmp(cmd[0], "cd") == 0 ||
-		ft_strcmp(cmd[0], "exit") == 0)
-		{
-			return(buildins(cmd, data));
-		}
-	pid = fork();
 	if (cmd == NULL)
 		exit_error(0);
+	pid = fork();
 	if (pid == 0)
 	{
+		prepare_fd(templist);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		set_terminos_echo(1);
-		// cmd = lexer(argv, envp);
+		if (ft_strcmp(cmd[0], heredoc_cmd) == 0)
+			return (here_doc_gnl(cmd[1]), 0);
+		if (ft_strcmp(cmd[0], "echo") == 0 ||
+			ft_strcmp(cmd[0], "pwd") == 0 ||
+			ft_strcmp(cmd[0], "env") == 0 ||
+			ft_strcmp(cmd[0], "unset") == 0 ||
+			ft_strcmp(cmd[0], "export") == 0 ||
+			ft_strcmp(cmd[0], "cd") == 0 ||
+			ft_strcmp(cmd[0], "exit") == 0)
+			return (buildins(cmd, data), exit(0), 0);
 		if (cmd[0][0] == '.' && cmd[0][1] == '/')
 		{
 			path = ft_strdup(cmd[0]);
@@ -152,15 +157,9 @@ int	execute(char **cmd, t_data **data)
 			path = get_path((*data)->envp, cmd[0]);
 		if(!path)
 			exit(1);
-		return(execve(path, cmd, (*data)->envp));
+		execve(path, cmd, (*data)->envp);
 	}
 	else
-		waitpid(pid, &exit_status, 0);
-	// if (execve(path, cmd, envp) == -1)
-	// 	exit_error(0);
-	if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGQUIT)
-		ft_printf("Quit\n");
-	else if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGINT)
-		ft_printf("\n");
-	return(exit_status);
+		templist->pid = pid;
+	return(0);
 }

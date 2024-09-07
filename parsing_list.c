@@ -126,7 +126,7 @@ t_node	*make_final_list(t_tokens *tokens)
 		{
 			newnode->type = s_command;
 			newnode->simple_cmd.cmd = ft_strdup(token->token);
-			newnode->simple_cmd.array = malloc(sizeof(char *) * 1000);
+			newnode->simple_cmd.array = ft_calloc(sizeof(char *), 1000);
 			newnode->simple_cmd.array[i] = ft_strdup(token->token);
 			i++;
 			token = token->next;

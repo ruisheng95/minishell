@@ -102,8 +102,8 @@ typedef struct s_data
 	char	**envp;
 	char	*input_line;
 	char	**tokens;
-	int		saved_in_fd;
-	int		saved_out_fd;
+	// int		saved_in_fd;
+	// int		saved_out_fd;
 	int		exit_code;
 	t_node	*instr_list;
 }	t_data;
@@ -113,6 +113,7 @@ typedef struct s_cmd_list
 	char **cmd;
 	int in_fd;
 	int	out_fd;
+	pid_t	pid;
 
 	struct s_cmd_list *next;
 	struct s_cmd_list *prev;
@@ -137,7 +138,7 @@ void	change_env_pwd(t_data *data);
 
 //execve
 char	*get_path(char **envp, char *cmd);
-int		execute(char **cmd, t_data **data);
+int		execute(char **cmd, t_data **data, t_cmd_list *templist);
 
 //lexer2
 int handle_quotes(char *line, int i);
