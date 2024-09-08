@@ -28,37 +28,37 @@ int handle_quotes(char *line, int i)
 	return i;
 }
 
-char	*substr_expand(char *line, t_lexing *lexer, int i, int start)
-{
-	char *res;
-	char *temp;
+// char	*substr_expand(char *line, t_lexing *lexer, int i, int start)
+// {
+// 	char *res;
+// 	char *temp;
 
-	temp = ft_substr(line, start, i - start);
-	res = expansion(temp, lexer);
-	free(temp);
-	return res;
-}
-int	lexer_helper1(t_lexing *lexer)
-{
-	lexer->start++;
-	if(lexer->line[lexer->i] == '\'')
-	{
-		if(handle_quotes(lexer->line, lexer->i) == -1)
-			return -1;
-		else
-			lexer->i = handle_quotes(lexer->line, lexer->i) + 1;
-		lexer->res[lexer->j] = ft_substr(lexer->line, lexer->start, lexer->i - lexer->start);
-	}
-	else
-	{
-		if(handle_quotes(lexer->line, lexer->i) == -1)
-			return -1;
-		else
-			lexer->i = handle_quotes(lexer->line, lexer->i) + 1;
-		lexer->res[lexer->j] = substr_expand(lexer->line, lexer, lexer->i, lexer->start);
-	}
-	return 0;
-}
+// 	temp = ft_substr(line, start, i - start);
+// 	res = expansion(temp, lexer);
+// 	free(temp);
+// 	return res;
+// }
+// int	lexer_helper1(t_lexing *lexer)
+// {
+// 	lexer->start++;
+// 	if(lexer->line[lexer->i] == '\'')
+// 	{
+// 		if(handle_quotes(lexer->line, lexer->i) == -1)
+// 			return -1;
+// 		else
+// 			lexer->i = handle_quotes(lexer->line, lexer->i) + 1;
+// 		lexer->res[lexer->j] = ft_substr(lexer->line, lexer->start, lexer->i - lexer->start);
+// 	}
+// 	else
+// 	{
+// 		if(handle_quotes(lexer->line, lexer->i) == -1)
+// 			return -1;
+// 		else
+// 			lexer->i = handle_quotes(lexer->line, lexer->i) + 1;
+// 		lexer->res[lexer->j] = substr_expand(lexer->line, lexer, lexer->i, lexer->start);
+// 	}
+// 	return 0;
+// }
 
 int	lexer_helper2(t_lexing *lexer)
 {
@@ -79,10 +79,33 @@ int	lexer_helper2(t_lexing *lexer)
 int lexer_helper3(t_lexing *lexer)
 {
 	while (lexer->line[lexer->i] && lexer->line[lexer->i] != ' '
-			&& lexer->line[lexer->i] != '|' && lexer->line[lexer->i] != '>' && lexer->line[lexer->i] != '<'
-			&& lexer->line[lexer->i] != '\'' && lexer->line[lexer->i] != '\"')
-				lexer->i++;
-		lexer->res[lexer->j] = substr_expand(lexer->line, lexer, lexer->i, lexer->start);
+			&& lexer->line[lexer->i] != '|' && lexer->line[lexer->i] != '>' && lexer->line[lexer->i] != '<')
+				{
+					if(lexer->line[lexer->i] == '\'')
+					{
+						lexer->i++;
+						while(lexer->line[lexer->i] && lexer->line[lexer->i] != '\'')
+							lexer->i++;
+						if(lexer->line[lexer->i] == '\0')
+						{
+							printf("unclosed quote detected\n");
+							return -1;
+						}
+					}
+					if(lexer->line[lexer->i] == '\"')
+					{
+						lexer->i++;
+						while(lexer->line[lexer->i] && lexer->line[lexer->i] != '\"')
+							lexer->i++;
+						if(lexer->line[lexer->i] == '\0')
+						{
+							printf("unclosed quote detected\n");
+							return -1;
+						}
+					}
+					lexer->i++;
+				}
+	lexer->res[lexer->j] = ft_substr(lexer->line, lexer->start, lexer->i - lexer->start);
 	return 0;
 }
 

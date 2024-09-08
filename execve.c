@@ -60,7 +60,6 @@ char	*get_path(char **envp, char *cmd)
 
 int buildins(char **cmd, t_data **data)
 {
-	int	n;
 	if(ft_strcmp(cmd[0], "cd") == 0)
 	{
 		return(cd(cmd, *data));
@@ -131,6 +130,14 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 
 	if (cmd == NULL)
 		exit_error(0);
+	if (ft_strcmp(cmd[0], "echo") == 0 ||
+		ft_strcmp(cmd[0], "pwd") == 0 ||
+		ft_strcmp(cmd[0], "env") == 0 ||
+		ft_strcmp(cmd[0], "unset") == 0 ||
+		ft_strcmp(cmd[0], "export") == 0 ||
+		ft_strcmp(cmd[0], "cd") == 0 ||
+		ft_strcmp(cmd[0], "exit") == 0)
+		return (buildins(cmd, data));
 	pid = fork();
 	if (pid == 0)
 	{
@@ -140,14 +147,6 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 		set_terminos_echo(1);
 		if (ft_strcmp(cmd[0], heredoc_cmd) == 0)
 			return (here_doc_gnl(cmd[1]), exit(0), 0);
-		if (ft_strcmp(cmd[0], "echo") == 0 ||
-			ft_strcmp(cmd[0], "pwd") == 0 ||
-			ft_strcmp(cmd[0], "env") == 0 ||
-			ft_strcmp(cmd[0], "unset") == 0 ||
-			ft_strcmp(cmd[0], "export") == 0 ||
-			ft_strcmp(cmd[0], "cd") == 0 ||
-			ft_strcmp(cmd[0], "exit") == 0)
-			return (buildins(cmd, data), exit(0), 0);
 		if (cmd[0][0] == '.' && cmd[0][1] == '/')
 		{
 			path = ft_strdup(cmd[0]);

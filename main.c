@@ -114,7 +114,9 @@ int	run(char *line, t_data *data)
 	}
 	list = init_token_list(data);
 	identify_tokens_list(list);
+	expansion(list, data);
 	identify_tokens_list2(list);
+	// print_tokens_list(list);
 	data->exit_code = check_valid_list(list);
 	if(data->exit_code == 1)
 		return(1);

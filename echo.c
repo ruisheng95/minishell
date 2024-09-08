@@ -20,6 +20,11 @@ int	echo(char **cmd)
 
 	i = 1;
 	flag = 0;
+	if(!cmd[i])
+	{
+		write(1, "\n", 1);
+		return (0);
+	}
 	while(check_flag(cmd[i]) == 1)
 	{
 		flag = 1;

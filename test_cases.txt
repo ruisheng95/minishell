@@ -1,0 +1,11 @@
+
+//------------------buildins----------------------//
+
+//echo----
+echo
+echo test
+echo "'$invalid'"
+echo "'$invalid'"
+echo $USER
+
+

@@ -15,8 +15,6 @@
 
 #define string 1
 #define operator 2
-#define single_quote_string 3
-#define double_quote_string 4
 #define Pipe 5
 #define redir_input 6
 #define heredoc 7
@@ -124,8 +122,7 @@ char **lexer(char *line, t_data *data);
 
 //expansion
 char	*get_expand_string(char *str, char **envp);
-
-char	*expansion(char *line, t_lexing *lexer);
+void	expansion(t_tokens *list, t_data *data);
 
 //utils
 void	free_2d_array(char **str);

@@ -13,19 +13,20 @@ char **lexer(char *line, t_data *data)
 		while (lexer.line[lexer.i] == ' ')
 			lexer.i++;
 		lexer.start = lexer.i;
-		if (lexer.line[lexer.i] == '\'' || lexer.line[lexer.i] == '\"')
-		{
-			if (lexer_helper1(&lexer) == -1)
-				return NULL;
-			lexer.i++;
-		}
-		else if(lexer.line[lexer.i] == '|' || lexer.line[lexer.i] == '>' || lexer.line[lexer.i] == '<')
+		// if (lexer.line[lexer.i] == '\'' || lexer.line[lexer.i] == '\"')
+		// {
+		// 	if (lexer_helper1(&lexer) == -1)
+		// 		return NULL;
+		// 	lexer.i++;
+		// }
+		if(lexer.line[lexer.i] == '|' || lexer.line[lexer.i] == '>' || lexer.line[lexer.i] == '<')
 		{
 			lexer_helper2(&lexer);
 		}
 		else
 		{
-			lexer_helper3(&lexer);
+			if(lexer_helper3(&lexer) == -1)
+				return NULL;
 		}
 		// if (lexer.line[lexer.i] == '\'' || lexer.line[lexer.i] == '\"')
 		// 	lexer.i++;
@@ -82,10 +83,6 @@ void	identify_tokens_list(t_tokens *tokens)
 			else
 				tokens->type = redir_input;
 		}
-		else if(tokens->token[0] == '\'')
-			tokens->type = single_quote_string;
-		else if(tokens->token[0] == '\"')
-			tokens->type = double_quote_string;
 		// else if(tokens->token[0] == '$')
 		// 	tokens->type = dollar_sign;
 		else
@@ -215,13 +212,16 @@ void	print_token_array(char **str)
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_tokens *list;
-// 	char *str = ">>file1 >>file2 cat";
+// 	char *str = "$a$b";
 // 	t_data data;
-// 	data.tokens = lexer(str,envp);
+// 	data.envp = envp;
+// 	if((data.tokens = lexer(str, &data)) == NULL)
+// 		exit(1);
 // 	print_token_array(data.tokens);
 // 	printf("-----------------------------------\n");
 // 	list = init_token_list(&data);
 // 	identify_tokens_list(list);
+// 	expansion(list, &data);
 // 	identify_tokens_list2(list);
 // 	if(check_valid_list(list) == 1)
 // 		exit(1);
