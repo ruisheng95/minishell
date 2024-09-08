@@ -1,18 +1,5 @@
 #include "minishell.h"
 
-// void	free_2d_array(char **str)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while(str[i])
-// 	{
-// 		free(str[i]);
-// 		i++;
-// 	}
-// 	free(str);
-// }
-
 int total_strings(char **env)
 {
 	int i;
@@ -80,22 +67,32 @@ int	check_str(char *str)
 	return 0;
 }
 
-// int	check_export_args(char **str)
-// {
-// 	int	i;
+int	find_export_index(char **env, char *str)
+{
+	char	**tempenv;
+	int		i;
 
-// 	i = 0;
-// 	while(str[i])
-// 	{
-// 		if((str[i][0] >= 0 && str[i][0] <= 9) || check_str(str[i]) == 1)
-// 		{
-// 			printf("Error: export: '%s': not a valid identifier\n", str[i]);
-// 			return -1;
-// 		}
-// 		i++;
-// 	}
-// 	return 0;
-// }
+	tempenv = env;
+	i = 0;
+	while(tempenv[i] && ft_strncmp(tempenv[i], str, ft_strlen(str)) != 0)
+		i++;
+	return i;
+}
+
+int	print_sorted_env(char **tempenv)
+{
+	int	i;
+
+	i = 0;
+	sort_env(&tempenv);
+	while(tempenv[i])
+	{
+		printf("declare -x %s\n", tempenv[i]);
+		i++;
+	}
+	free_2d_array(tempenv);
+	return (0);
+}
 
 int export(char ***env, char **str)
 {
@@ -106,63 +103,42 @@ int export(char ***env, char **str)
 
 	i = 1;
 	tempenv = malloc(sizeof(char *) * (total_strings(*env) + 2));
-	
+	if(!tempenv)
+		return 1;
 	malloc_dup_env(tempenv, *env);
-	if(str[1])
+	if(!str[1])
+		return(print_sorted_env(tempenv));
+	while(str[i])
 	{
-		while(str[i])
+		if(ft_isdigit(str[i][0]) == 1 || check_str(str[i]) != 0)
 		{
-			if(ft_isdigit(str[i][0]) == 1 || check_str(str[i]) != 0)
-			{
-				if(tempsubstr)
-					free(tempsubstr);
-				free_2d_array(*env);
-				*env = tempenv;
-				if(check_str(str[i]) != 2)
-					printf("Error: export: '%s': not a valid identifier\n", str[i]);
-				if(check_str(str[i]) == 2)
-					return 0;
-				return 1;
-			}
-			j = 0;
-			while(str[i][j] && str[i][j] != '=')
-			{
-				j++;
-			}
-			tempsubstr = ft_substr(str[i], 0, j + 1);
-			j = 0;
-			while(tempenv[j])
-			{
-				if(ft_strncmp(tempenv[j], tempsubstr, ft_strlen(tempsubstr)) == 0)
-				{
-					free(tempenv[j]);
-					tempenv[j] = ft_strdup(str[i]);
-					break ;
-				}
-				j++;
-			}
-			if(tempenv[j] == NULL)
-			{
-				tempenv[j] = ft_strdup(str[i]);
-				tempenv[j + 1] = NULL; 
-			}
-			i++;
+			if(tempsubstr)
+				free(tempsubstr);
+			free_2d_array(*env);
+			*env = tempenv;
+			if(check_str(str[i]) != 2)
+				printf("Error: export: '%s': not a valid identifier\n", str[i]);
+			if(check_str(str[i]) == 2)
+				return 0;
+			return 1;
 		}
-		if(tempsubstr)
-			free(tempsubstr);
-		free_2d_array(*env);
-		*env = tempenv;
-		return 0;
-	}
-	else
-	{
-		sort_env(&tempenv);
-		while(tempenv[i])
+		j = 0;
+		while(str[i][j] && str[i][j] != '=')
+			j++;
+		tempsubstr = ft_substr(str[i], 0, j + 1);
+		j = find_export_index(tempenv, tempsubstr);
+		if(tempenv[j] == NULL)
 		{
-			printf("declare -x %s\n", tempenv[i]);
-			i++;
+			tempenv[j] = ft_strdup(str[i]);
+			tempenv[j + 1] = NULL;
 		}
-		free_2d_array(tempenv);
-		return 0;
+		else
+			tempenv[j] = ft_strdup(str[i]);
+		i++;
 	}
+	if(tempsubstr)
+		free(tempsubstr);
+	free_2d_array(*env);
+	*env = tempenv;
+	return 0;
 }
