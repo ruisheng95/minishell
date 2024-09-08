@@ -37,33 +37,33 @@ char	*get_readline_prompt(char **env)
 	return res;
 }
 
-t_tokens*	process_tokens(t_data *data)
-{
-	t_tokens *list;
-	t_tokens *newnode;
-	int i;
+// t_tokens*	process_tokens(t_data *data)
+// {
+// 	t_tokens *list;
+// 	t_tokens *newnode;
+// 	int i;
+// 	i = 0;
+// 	while(data->tokens[i])
+// 	{
+// 		newnode = malloc(sizeof(t_tokens *));
+// 		newnode->token = data->tokens[i];
+// 		if(!list)
+// 		{
+// 			list = newnode;
+// 			newnode->next = NULL;
+// 			newnode->prev = NULL;
+// 		}
+// 		else
+// 		{
+// 			list->next = newnode;
+// 			newnode->prev = list;
+// 			newnode->next = NULL;
+// 		}
+// 		i++;
+// 	}
+// 	return list;
+// }
 
-	i = 0;
-	while(data->tokens[i])
-	{
-		newnode = malloc(sizeof(t_tokens *));
-		newnode->token = data->tokens[i];
-		if(!list)
-		{
-			list = newnode;
-			newnode->next = NULL;
-			newnode->prev = NULL;
-		}
-		else
-		{
-			list->next = newnode;
-			newnode->prev = list;
-			newnode->next = NULL;
-		}
-		i++;
-	}
-	return list;
-}
 int the_real_actual_main(t_data *data)
 {
 	int exit_status = 0;
@@ -95,6 +95,7 @@ int the_real_actual_main(t_data *data)
 		}
 		templist = templist->next;
 	}
+	free_t_cmd_list(cmdlist);
 	return 0;
 }
 int	run(char *line, t_data *data)
@@ -121,11 +122,14 @@ int	run(char *line, t_data *data)
 	data->instr_list = make_final_list(list);
 	data->instr_list = make_final_list_heredoc(data->instr_list);
 	// execute(data.tokens, data.envp);
-	// print_final_list(data.instr_list);
+	// print_final_list(data->instr_list);
 	if(data->instr_list != NULL)
 	{
 		data->exit_code = the_real_actual_main(data);
 	}
+	free_t_tokens(list);
+	free_2d_array(data->tokens);
+	free_t_node(data->instr_list);
 	return 0;
 }
 
@@ -144,14 +148,14 @@ int main(int argc, char **argv, char **envp)
 	pid_t	pid;
 	t_data	data;
 	char	*line;
-	char	*readline_prompt;
+	// char	*readline_prompt;
 
 	init_data_struct(&data, envp);
 	signal(SIGQUIT, SIG_IGN);
     while (1)
 	{
 		signal(SIGINT, signal_handler);
-		readline_prompt = get_readline_prompt(envp);
+		// readline_prompt = get_readline_prompt(envp);
 		set_terminos_echo(0);
     	line = readline("Minishell$");
 		if (line == NULL)
@@ -159,14 +163,14 @@ int main(int argc, char **argv, char **envp)
 			write(1,"exit\n",5);
 			break ;
 		}
-		if (line)
-			add_history(line);
-		// print_history();
-		if (line)
+		if (line && line[0])
 		{
+			add_history(line);
 			run(line, &data);
 		}
+		free(line);
     }
 	set_terminos_echo(1);
+	free_2d_array(data.envp);
     return 0;
 }

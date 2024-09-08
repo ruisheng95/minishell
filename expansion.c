@@ -21,6 +21,7 @@ char	*expansion(char *line, t_lexing *lexer)
 	char *temp;
 	int j;
 	int k = 0;
+	char *tmp;
 
 	i = 0;
 	j = 0;
@@ -45,7 +46,9 @@ char	*expansion(char *line, t_lexing *lexer)
 			{
 				while(line[j] && line[j] != ' ')
 					j++;
-				temp = get_expand_string(ft_substr(line, start, j - start), lexer->envp);
+				tmp = ft_substr(line, start, j - start);
+				temp = get_expand_string(tmp, lexer->envp);
+				free(tmp);
 				if (temp != NULL)
 				{
 					k = 0;
@@ -59,7 +62,8 @@ char	*expansion(char *line, t_lexing *lexer)
 				}
 			}
 		}
-		res[i++] = line[j++];
+		if (line[j])
+			res[i++] = line[j++];
 	}
 	res[i] = '\0';
 	return res;

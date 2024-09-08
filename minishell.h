@@ -135,6 +135,9 @@ int		set_terminos_echo(int enable);
 void	increment_shell_lvl(t_data *data);
 void	change_env_oldpwd(t_data *data);
 void	change_env_pwd(t_data *data);
+void	free_t_tokens(t_tokens *obj);
+void	free_t_node(t_node *obj);
+void	free_t_cmd_list(t_cmd_list *obj);
 
 //execve
 char	*get_path(char **envp, char *cmd);

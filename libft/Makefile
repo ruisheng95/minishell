@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+         #
+#    By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/03 20:06:11 by cheelim           #+#    #+#              #
-#    Updated: 2024/08/05 15:49:06 by ethanlim         ###   ########.fr        #
+#    Updated: 2024/09/08 21:15:02 by rng              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ $(NAME) : $(OBJS)
 	@ar rcs $(NAME) $(OBJS)
 
 %.o: %.c
-	@$(CC) $(cflags) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
 	@rm -rf $(OBJS)

@@ -18,6 +18,7 @@ void	make_command_list_heredoc(t_cmd_list **head, t_cmd_list **lastnode, t_cmd_l
 
 	heredoc_node = malloc(sizeof(t_cmd_list));
 	heredoc_node->cmd = get_heredoc_cmd(limiter);
+	heredoc_node->pid = 0;
 	if (pipe(pipe_fd) == -1)
 	{
 		perror("pipe");

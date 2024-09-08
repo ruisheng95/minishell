@@ -127,6 +127,7 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 {
 	char	*path;
 	pid_t	pid;
+	int		exit_status;
 
 	if (cmd == NULL)
 		exit_error(0);
@@ -138,7 +139,7 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 		signal(SIGINT, SIG_DFL);
 		set_terminos_echo(1);
 		if (ft_strcmp(cmd[0], heredoc_cmd) == 0)
-			return (here_doc_gnl(cmd[1]), 0);
+			return (here_doc_gnl(cmd[1]), exit(0), 0);
 		if (ft_strcmp(cmd[0], "echo") == 0 ||
 			ft_strcmp(cmd[0], "pwd") == 0 ||
 			ft_strcmp(cmd[0], "env") == 0 ||
@@ -160,6 +161,10 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 		execve(path, cmd, (*data)->envp);
 	}
 	else
+	{
 		templist->pid = pid;
+		if (ft_strcmp(cmd[0], heredoc_cmd) == 0)
+			waitpid(templist->pid, &exit_status, 0);
+	}
 	return(0);
 }

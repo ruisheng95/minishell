@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 01:39:41 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/06/25 00:07:58 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/08 21:08:58 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	*ft_calloc(size_t num, size_t size);
 
 char	*ft_readfile(int fd, char *stash)
 {
@@ -18,7 +20,7 @@ char	*ft_readfile(int fd, char *stash)
 	int		bytesread;
 
 	bytesread = 1;
-	buffer = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	buffer = ft_calloc(sizeof(char), (BUFFER_SIZE + 1));
 	if (!buffer)
 		return (NULL);
 	while (bytesread > 0 && ft_strchr(buffer, '\n') == 0)
