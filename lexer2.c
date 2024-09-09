@@ -129,7 +129,7 @@ int	count_lexer_array(char *line)
 		}
 		if(line[i] == ' ' || line[i] == '|' || line[i] == '>' || line[i] == '<')
 			count++;
-			i++;
+		i++;
 	}
 	return count;
 }

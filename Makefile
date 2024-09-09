@@ -1,7 +1,7 @@
 SRCS = \
 main.c rl_redisplay_line.c lexer.c expansion.c \
 execve.c cd.c echo.c env.c lexer2.c pwd.c parsing_list.c \
-export.c unset.c utils.c command_list.c
+export.c unset.c utils.c command_list.c lexer3.c
 
 BONUS_SRCS = \
 pipex_bonus.c utils_bonus.c
@@ -63,7 +63,7 @@ re: fclean all
 bonus : fclean $(BONUS_NAME)
 
 testlex:
-	gcc expansion.c lexer.c lexer2.c libft.a 
+	gcc expansion.c lexer.c lexer2.c lexer3.c libft.a 
 
 testlist:
 	gcc expansion.c lexer.c lexer2.c parsing_list.c libft.a

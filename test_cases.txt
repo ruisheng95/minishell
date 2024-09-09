@@ -7,5 +7,10 @@ echo test
 echo "'$invalid'"
 echo "'$invalid'"
 echo $USER
+echo "$USER"
+echo '$USER'
+echo -n test
+echo -nnn test
+echo -n-n test
 
 

@@ -212,7 +212,7 @@ void	print_token_array(char **str)
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_tokens *list;
-// 	char *str = "$a$b";
+// 	char *str = "echo '\"$USER\"'";
 // 	t_data data;
 // 	data.envp = envp;
 // 	if((data.tokens = lexer(str, &data)) == NULL)
@@ -222,6 +222,8 @@ void	print_token_array(char **str)
 // 	list = init_token_list(&data);
 // 	identify_tokens_list(list);
 // 	expansion(list, &data);
+// 	tokens_list_processing(list);
+// 	remove_quotes_from_token_list(list);
 // 	identify_tokens_list2(list);
 // 	if(check_valid_list(list) == 1)
 // 		exit(1);

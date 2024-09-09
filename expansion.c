@@ -116,11 +116,13 @@ char	*expand_string(char *line, t_data *data)
 	{
 		if(line[j] == '\"')
 		{
+			res[i] = line[j];
+			i++;
+			j++;
 			if(double_quotes_flag == 0)
 				double_quotes_flag = 1;
 			else
 				double_quotes_flag = 0;
-			j++;
 		}
 		else if(line[j] == '$')
 		{
@@ -146,14 +148,14 @@ char	*expand_string(char *line, t_data *data)
 		}
 		else if(line[j] == '\'' && double_quotes_flag == 0)
 		{
-			j++;
+			res[i++] = line[j++];
 			while(line[j] && line[j] != '\'')
 			{
 				res[i] = line[j];
 				i++;
 				j++;
 			}
-			j++;
+			res[i++] = line[j++];
 		}
 		else
 		{

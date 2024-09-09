@@ -146,7 +146,11 @@ int	lexer_helper1(t_lexing *lexer);
 int	lexer_helper2(t_lexing *lexer);
 int lexer_helper3(t_lexing *lexer);
 int	init_lexer_struct(t_lexing *lexer, t_data *data, char *line);
+int	count_lexer_array(char *line);
 
+//lexer3
+void	tokens_list_processing(t_tokens *list);
+void	remove_quotes_from_token_list(t_tokens *list);
 
 //parse_list
 t_node	*make_final_list(t_tokens *tokens);
