@@ -212,7 +212,7 @@ void	print_token_array(char **str)
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_tokens *list;
-// 	char *str = "echo '\"$USER\"'";
+// 	char *str = "export b=\"ho hi\"";
 // 	t_data data;
 // 	data.envp = envp;
 // 	if((data.tokens = lexer(str, &data)) == NULL)
@@ -232,7 +232,7 @@ void	print_token_array(char **str)
 
 // int main(int argc, char **argv, char **envp)
 // {
-// 	char *str = "echo \"fsfsffsf";
-// 	char **lex = lexer(str, envp);
+// 	char *str = "export b=\"ho hi\"";
+// 	char **lex = semi_ft_split(str);
 // 	print_token_array(lex);
 // }

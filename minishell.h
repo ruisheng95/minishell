@@ -151,6 +151,7 @@ int	count_lexer_array(char *line);
 //lexer3
 void	tokens_list_processing(t_tokens *list);
 void	remove_quotes_from_token_list(t_tokens *list);
+char	**semi_ft_split(char *line);
 
 //parse_list
 t_node	*make_final_list(t_tokens *tokens);

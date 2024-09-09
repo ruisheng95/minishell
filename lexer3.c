@@ -15,18 +15,22 @@ char	**semi_ft_split(char *line)
 		while(line[i] && line[i] == ' ')
 			i++;
 		start = i;
-		while(line[i] && line[i] != ' ')
+		while(line[i] && (line[i] != ' '))
 		{
 			if(line[i] == '\'')
 			{
 				i++;
 				while(line[i] && line[i] != '\'')
 					i++;
+				if(line[i])
+					i++;
 			}
 			if(line[i] == '\"')
 			{
 				i++;
-				while(line[i] && line[i] == '\"')
+				while(line[i] && line[i] != '\"')
+					i++;
+				if(line[i])
 					i++;
 			}
 			else
