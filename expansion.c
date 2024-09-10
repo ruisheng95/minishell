@@ -126,15 +126,21 @@ char	*expand_string(char *line, t_data *data)
 		}
 		else if(line[j] == '$')
 		{
-			if(line[j + 1] == '\0')
+			if(line[j + 1] == '\0' || line[j + 1] == '\"' || line [j + 1] == '\'' || line[j + 1] == ' ')
 			{
-				res[i] = line[j];
+				res[i] = '$';
+				i++;
+				j++;
 			}
 			else if(line[j + 1] == '?')
 			{
 				res[i] = data->exit_code + '0';
 				i++;
 				j += 2;
+			}
+			else if(line[j + 1] == '$')
+			{
+
 			}
 			else
 			{

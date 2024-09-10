@@ -1,16 +1,41 @@
 
 //------------------buildins----------------------//
 
-//echo----
+
+
+//echo---------------------------
 echo
 echo test
-echo "'$invalid'"
-echo "'$invalid'"
+echo 1 2
+echo word1 word2
+echo echo
+echo "hello""world"
+echo "hello"world
+echo 0123"$USER"0123"$USER"0123
+---------------------------
 echo $USER
 echo "$USER"
+echo "'$USER'"
+echo 0123"$USER"0123
 echo '$USER'
+echo "'$invalid'"
+echo "'$invalid'"
+echo $
+echo $$ //cant use getpid lol so cant do this
+echo $ $ $ $
+echo "$"
+echo "$ $ $ $"
+---------------------------
 echo -n test
 echo -nnn test
 echo -n-n test
+echo -n -n test
+echo -nk test
+echo test -n
+echo - n test
+echo "-n" test
+echo "-n-n" test
+
+//--------------failed, to fix-------------//
 
 
