@@ -144,8 +144,9 @@ t_node	*make_final_list(t_tokens *tokens)
 			else
 			{
 				newnode->simple_cmd.cmd = ft_strdup("");
-				newnode->simple_cmd.array = malloc(sizeof(char *) * 1);
+				newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
 				newnode->simple_cmd.array[0] = ft_strdup("");
+				newnode->simple_cmd.array[1] = NULL;
 				token = token->next;
 			}
 
