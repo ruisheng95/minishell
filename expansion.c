@@ -126,7 +126,7 @@ char	*expand_string(char *line, t_data *data)
 		}
 		else if(line[j] == '$')
 		{
-			if(line[j + 1] == '\0' || line[j + 1] == '\"' || line [j + 1] == '\'' || line[j + 1] == ' ')
+			if(line[j + 1] == '\0' || line[j + 1] == '\"' || line [j + 1] == '\'' || line[j + 1] == '\"')
 			{
 				res[i] = '$';
 				i++;
@@ -137,10 +137,6 @@ char	*expand_string(char *line, t_data *data)
 				res[i] = data->exit_code + '0';
 				i++;
 				j += 2;
-			}
-			else if(line[j + 1] == '$')
-			{
-
 			}
 			else
 			{
@@ -190,7 +186,7 @@ void	expansion(t_tokens *list, t_data *data)
 
 // int main(int argc, char **argv, char **envp)
 // {
-// 	char temp[] = "\"'$USER'\"";
+// 	char temp[] = "$invalid";
 // 	t_data data;
 // 	data.envp = envp;
 // 	data.exit_code = 0;

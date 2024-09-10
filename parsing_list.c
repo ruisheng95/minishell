@@ -125,24 +125,30 @@ t_node	*make_final_list(t_tokens *tokens)
 		else if(token->type == command)
 		{
 			newnode->type = s_command;
-			newnode->simple_cmd.cmd = ft_strdup(token->token);
-			newnode->simple_cmd.array = ft_calloc(sizeof(char *), 1000);
-			newnode->simple_cmd.array[i] = ft_strdup(token->token);
-			i++;
-			token = token->next;
-			while(token != NULL && token->type == arguments)
+			if(token->token != NULL && token->token[0] != '\0')
 			{
-				// newnode->simple_cmd.args[j] = ft_strdup(token->token);
+				newnode->simple_cmd.cmd = ft_strdup(token->token);
+				newnode->simple_cmd.array = ft_calloc(sizeof(char *), 1000);
 				newnode->simple_cmd.array[i] = ft_strdup(token->token);
 				i++;
-				// j++;
 				token = token->next;
-			}
-			// newnode->simple_cmd.args[j] = NULL;
+				while(token != NULL && token->type == arguments)
+				{
+					newnode->simple_cmd.array[i] = ft_strdup(token->token);
+					i++;
+					token = token->next;
+				}
 			newnode->simple_cmd.array[i] = NULL;
 			i = 0;
-			// j = 0;
-			// token = token->prev;
+			}
+			else
+			{
+				newnode->simple_cmd.cmd = ft_strdup("");
+				newnode->simple_cmd.array = malloc(sizeof(char *) * 1);
+				newnode->simple_cmd.array[0] = ft_strdup("");
+				token = token->next;
+			}
+
 		}
 		else
 			token = token->next;
@@ -245,18 +251,28 @@ void	print_final_list(t_node *list)
 // {
 // 	t_tokens *list;
 // 	t_node	*final_list;
-// 	char *str = "export a=\"dsf sdfdsf\"";
+// 	char *str = "$INVALID";
 // 	t_data data;
 // 	data.envp = envp;
+// 	if((data.tokens = lexer(str, &data)) == NULL)
+// 		exit(1);
 // 	data.tokens = lexer(str,&data);
 // 	// print_token_array(data.tokens);
 // 	printf("-----------------------------------\n");
 // 	list = init_token_list(&data);
 // 	identify_tokens_list(list);
+// 	printf("-----------------------------------\n");
+// 	expansion(list, &data);
+// 	tokens_list_processing(list);
 // 	identify_tokens_list2(list);
+// 	remove_quotes_from_token_list(list);
 // 	if(check_valid_list(list) == 1)
 // 		exit(1);
 // 	// print_tokens_list(list);
-// 	final_list = make_final_list(list);
+// 	printf("-----------------------------------\n");
+// 	final_list = make_final_list(list); //<- this causes the seg fault
+// 	printf("-----------------------------------\n");
 // 	print_final_list(final_list);
+// 	printf("-----------------------------------\n");
+// 	return 0;
 // }

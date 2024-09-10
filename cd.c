@@ -5,7 +5,7 @@ int cd(char **cmd, t_data *data)
 	char *path;
 
 	change_env_oldpwd(data);
-	if(cmd[1] == NULL)
+	if(cmd[1] == NULL || cmd[1][0] == '\0')
 	{
 		path = get_expand_string("HOME", data->envp);
 		if(!path)
@@ -19,7 +19,7 @@ int cd(char **cmd, t_data *data)
 	if (chdir(path) == -1)
 	{
 		perror("cd");
-		return 1;
+		return 0;
 	}
 	// printf("current dir %s\n", getcwd(NULL, 0));
 	change_env_pwd(data);

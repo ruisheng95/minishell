@@ -66,7 +66,7 @@ testlex:
 	gcc expansion.c lexer.c lexer2.c lexer3.c libft.a 
 
 testlist:
-	gcc expansion.c lexer.c lexer2.c parsing_list.c libft.a
+	gcc expansion.c lexer.c lexer2.c parsing_list.c libft.a lexer3.c
 
 testcl:
 	gcc expansion.c lexer.c lexer2.c parsing_list.c command_list.c libft.a

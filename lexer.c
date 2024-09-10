@@ -212,7 +212,7 @@ void	print_token_array(char **str)
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_tokens *list;
-// 	char *str = "export b=\"ho hi\"";
+// 	char *str = "$INVALID";
 // 	t_data data;
 // 	data.envp = envp;
 // 	if((data.tokens = lexer(str, &data)) == NULL)
@@ -223,7 +223,9 @@ void	print_token_array(char **str)
 // 	identify_tokens_list(list);
 // 	expansion(list, &data);
 // 	tokens_list_processing(list);
+// 	printf("-----------------------------------\n");
 // 	remove_quotes_from_token_list(list);
+// 	printf("-----------------------------------\n");
 // 	identify_tokens_list2(list);
 // 	if(check_valid_list(list) == 1)
 // 		exit(1);

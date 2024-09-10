@@ -87,6 +87,8 @@ char	*remove_quotes(char *line)
 	int		i;
 	int		j;
 
+	if(!line || line[0] == '\0')
+		return NULL;
 	i = 0;
 	j = 0;
 	res = malloc(sizeof(char) * ft_strlen(line) + 1);

@@ -25,7 +25,7 @@ int	echo(char **cmd)
 		write(1, "\n", 1);
 		return (0);
 	}
-	while(check_flag(cmd[i]) == 1)
+	while(cmd[i] && check_flag(cmd[i]) == 1)
 	{
 		flag = 1;
 		i++;

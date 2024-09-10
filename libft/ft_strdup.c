@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cheelim <cheelim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:37 by cheelim           #+#    #+#             */
-/*   Updated: 2024/06/06 16:53:49 by cheelim          ###   ########.fr       */
+/*   Updated: 2024/09/10 20:57:01 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ char	*ft_strdup(const char *src)
 	int		i;
 
 	i = 0;
+	if (!src)
+		return (NULL);
 	len = ft_strlen(src);
 	dest = (char *) malloc (len + 1);
 	if (!dest)
