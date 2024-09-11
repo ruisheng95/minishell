@@ -95,12 +95,32 @@ int buildins(char **cmd, t_data **data)
 	return 1;
 }
 
-void	prepare_fd(t_cmd_list *templist)
+void	prepare_fd(t_cmd_list *templist, t_data *data)
 {
 	dup2(templist->in_fd, 0);
 	dup2(templist->out_fd, 1);
+	// if (templist->in_fd != 0)
+	// 	close(templist->in_fd);
+	// if(templist->out_fd != 1)
+	// 	close(templist->out_fd);
 	for (int i = 3; i < 1000; i++)
-		close(i);
+	{
+		if(i != data->saved_in_fd && i != data->saved_out_fd)
+			close(i);
+	}
+}
+
+void	set_fd_back(t_data *data)
+{
+	int i = 0;
+	// while(i < 1000)
+	// {
+	// 	if(i != data->saved_in_fd && i != data->saved_out_fd)
+	// 		close(i);
+	// 	i++;
+	// }
+	dup2(data->saved_in_fd, 0);
+	dup2(data->saved_out_fd, 1);
 }
 
 void	here_doc_gnl(char *lim)
@@ -127,9 +147,11 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 	char	*path;
 	pid_t	pid;
 	int		exit_status;
+	int		n;
 
 	if (cmd == NULL)
 		exit_error(0);
+	// prepare_fd(templist, *data);
 	if (ft_strcmp(cmd[0], "echo") == 0 ||
 		ft_strcmp(cmd[0], "pwd") == 0 ||
 		ft_strcmp(cmd[0], "env") == 0 ||
@@ -137,11 +159,14 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 		ft_strcmp(cmd[0], "export") == 0 ||
 		ft_strcmp(cmd[0], "cd") == 0 ||
 		ft_strcmp(cmd[0], "exit") == 0)
-		return (buildins(cmd, data));
+		{
+			n = buildins(cmd, data);
+			return (n);
+		}
 	pid = fork();
 	if (pid == 0)
 	{
-		prepare_fd(templist);
+		prepare_fd(templist, *data);
 		signal(SIGQUIT, SIG_DFL);
 		signal(SIGINT, SIG_DFL);
 		set_terminos_echo(1);
@@ -157,7 +182,8 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 			path = get_path((*data)->envp, cmd[0]);
 		if(!path)
 			exit(1);
-		execve(path, cmd, (*data)->envp);
+		if(execve(path, cmd, (*data)->envp) == -1)
+			return -1;
 	}
 	else
 	{
@@ -165,5 +191,6 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 		if (ft_strcmp(cmd[0], heredoc_cmd) == 0)
 			waitpid(templist->pid, &exit_status, 0);
 	}
-	return(0);
+	// set_fd_back(*data);
+	return(exit_status);
 }

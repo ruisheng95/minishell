@@ -119,19 +119,29 @@ void	print_cmd_list(t_cmd_list *list)
 // 	t_tokens *list;
 // 	t_node	*final_list;
 // 	t_cmd_list *cmdlist;
-// 	char *str = "cat < infile | grep 'a'";
+// 	char *str = "env | grep \"USER\"";
 // 	t_data data;
-// 	data.tokens = lexer(str,envp);
+// 	data.envp = envp;
+// 	if((data.tokens = lexer(str, &data)) == NULL)
+// 		exit(1);
+// 	data.tokens = lexer(str,&data);
 // 	// print_token_array(data.tokens);
 // 	printf("-----------------------------------\n");
 // 	list = init_token_list(&data);
 // 	identify_tokens_list(list);
+// 	printf("-----------------------------------\n");
+// 	expansion(list, &data);
+// 	tokens_list_processing(list);
 // 	identify_tokens_list2(list);
+// 	remove_quotes_from_token_list(list);
 // 	if(check_valid_list(list) == 1)
 // 		exit(1);
 // 	// print_tokens_list(list);
-// 	final_list = make_final_list(list);
+// 	printf("-----------------------------------\n");
+// 	final_list = make_final_list(list); //<- this causes the seg fault
+// 	printf("-----------------------------------\n");
 // 	print_final_list(final_list);
+// 	printf("-----------------------------------\n");
 // 	printf("-----------------------------------\n");
 // 	cmdlist = make_command_list(final_list);
 // 	print_cmd_list(cmdlist);

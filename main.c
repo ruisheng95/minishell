@@ -79,7 +79,10 @@ int the_real_actual_main(t_data *data)
 	}
 	templist = cmdlist;
 	for (int i = 3; i < 1000; i++)
-		close(i);
+	{
+		if(i != data->saved_in_fd && i != data->saved_out_fd)
+			close(i);
+	}
 	while (templist)
 	{
 		waitpid(templist->pid, &exit_status, 0);
@@ -142,8 +145,8 @@ void	init_data_struct(t_data *data, char **envp)
 	data->envp = malloc(sizeof(char *) * (total_strings(envp) + 1));
 	malloc_dup_env(data->envp, envp);
 	increment_shell_lvl(data);
-	// data->saved_in_fd = dup(0);
-	// data->saved_out_fd = dup(1);
+	data->saved_in_fd = dup(0);
+	data->saved_out_fd = dup(1);
 	data->exit_code = 0;
 }
 

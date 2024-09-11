@@ -7,7 +7,7 @@ int	env(t_data *data)
 	i = 0;
 	while(data->envp[i])
 	{
-		printf("%s\n", data->envp[i]);
+		ft_putendl_fd(data->envp[i], 1);
 		i++;
 	}
 	return 0;

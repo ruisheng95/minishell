@@ -100,8 +100,8 @@ typedef struct s_data
 	char	**envp;
 	char	*input_line;
 	char	**tokens;
-	// int		saved_in_fd;
-	// int		saved_out_fd;
+	int		saved_in_fd;
+	int		saved_out_fd;
 	int		exit_code;
 	t_node	*instr_list;
 }	t_data;

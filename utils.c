@@ -52,6 +52,7 @@ void	increment_shell_lvl(t_data *data)
 {
 	int	i;
 	int	j;
+	int shelllvl;
 
 	i = 0;
 	j = 0;
@@ -59,13 +60,21 @@ void	increment_shell_lvl(t_data *data)
 	{
 		if(ft_strncmp(data->envp[i], "SHLVL=", 6) == 0)
 		{
-			while(data->envp[i][j + 1])
+			while(data->envp[i][j] < '0' || data->envp[i][j] > '9')
 				j++;
-			data->envp[i][j] += 1;
+			if(data->envp[i][j])
+			{
+				shelllvl = ft_atoi(ft_substr(data->envp[i], j, ft_strlen(data->envp[i]) - j));
+				shelllvl++;
+				free(data->envp[i]);
+				data->envp[i] = ft_strjoin("SHLVL=", ft_itoa(shelllvl));
+			}
 			return;
 		}
 		i++;
 	}
+	data->envp[i] = ft_strdup("SHLVL=1");
+	data->envp[i + 1] = NULL;
 	return ;
 }
 
