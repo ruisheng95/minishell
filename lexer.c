@@ -183,6 +183,7 @@ int	check_valid_list(t_tokens *list)
 	}
 	return 0;
 }
+
 void print_tokens_list(t_tokens *list) 
 {
 	int i = 0;

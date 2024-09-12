@@ -1,7 +1,8 @@
 SRCS = \
 main.c rl_redisplay_line.c lexer.c expansion.c \
 execve.c cd.c echo.c env.c lexer2.c pwd.c parsing_list.c \
-export.c unset.c utils.c command_list.c lexer3.c
+export.c unset.c utils.c command_list.c lexer3.c utils2.c \
+free.c
 
 BONUS_SRCS = \
 pipex_bonus.c utils_bonus.c

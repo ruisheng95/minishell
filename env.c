@@ -1,14 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/13 00:45:01 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/13 00:45:22 by ethanlim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	env(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(data->envp[i])
+	while (data->envp[i])
 	{
 		ft_putendl_fd(data->envp[i], 1);
 		i++;
 	}
-	return 0;
+	return (0);
 }
