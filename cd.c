@@ -19,7 +19,7 @@ int cd(char **cmd, t_data *data)
 	if (chdir(path) == -1)
 	{
 		perror("cd");
-		return 0;
+		return 1;
 	}
 	// printf("current dir %s\n", getcwd(NULL, 0));
 	change_env_pwd(data);

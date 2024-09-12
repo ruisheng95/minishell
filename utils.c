@@ -47,6 +47,23 @@ int	set_terminos_echo(int enable)
 		return (-1);
 	return (0);
 }
+int		check_shell_lvl(char *str)
+{
+	int	i;
+
+	i = 0;
+	while(str[i] && str[i] != '=')
+		i++;
+	if(str[i + 1] == '\0')
+		return (1);
+	while(str[i])
+	{
+		i++;
+		if(str[i] < '0' || str[i] > '9')
+			return (1);
+	}
+	return (0);
+}
 
 void	increment_shell_lvl(t_data *data)
 {
@@ -60,6 +77,12 @@ void	increment_shell_lvl(t_data *data)
 	{
 		if(ft_strncmp(data->envp[i], "SHLVL=", 6) == 0)
 		{
+			if(check_shell_lvl(data->envp[i]) == 1)
+			{
+				free(data->envp[i]);
+				data->envp[i] = ft_strdup("SHLVL=1");
+				return ;
+			}
 			while(data->envp[i][j] < '0' || data->envp[i][j] > '9')
 				j++;
 			if(data->envp[i][j])
@@ -188,4 +211,15 @@ void	free_t_cmd_list(t_cmd_list *obj)
 		}
 		free(temp_node);
 	}
+}
+
+int	waitpid_and_get_exit_status(pid_t pid)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else
+		return(0);
 }

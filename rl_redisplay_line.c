@@ -1,7 +1,8 @@
 #include "minishell.h"
 #include <readline/readline.h>
 
-void rl_replace_line(const char *line, int len) {
+void rl_replace_line(const char *line, int len) 
+{
     int old_point = rl_point;
     int old_end = rl_end;
 

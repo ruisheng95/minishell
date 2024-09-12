@@ -73,7 +73,7 @@ int the_real_actual_main(t_data *data)
 	// print_cmd_list(templist);
 	while(templist && templist->cmd)
 	{
-		if(execute(templist->cmd, &data, templist) != 0)
+		if(execute(templist->cmd, &data, templist) != 0 )
 			return 1;
 		templist = templist->next;
 	}
@@ -85,7 +85,7 @@ int the_real_actual_main(t_data *data)
 	}
 	while (templist)
 	{
-		waitpid(templist->pid, &exit_status, 0);
+		exit_status = waitpid_and_get_exit_status(templist->pid);
 		if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGQUIT)
 		{
 			ft_printf("Quit\n");
@@ -99,12 +99,14 @@ int the_real_actual_main(t_data *data)
 		templist = templist->next;
 	}
 	free_t_cmd_list(cmdlist);
-	return 0;
+	return (exit_status);
 }
+
 int	run(char *line, t_data *data)
 {
 	t_tokens	*list;
 	pid_t	pid;
+	int		error = 0;
 
 	data->input_line = line;
 	data->tokens = lexer(line, data);
@@ -112,8 +114,8 @@ int	run(char *line, t_data *data)
 	// process_tokens(&data);
 	if (data->tokens == NULL)
 	{
-		// free(data->envp);
-		return 1;
+		data->exit_code = 1;
+		return (1);
 	}
 	list = init_token_list(data);
 	identify_tokens_list(list);
@@ -122,11 +124,18 @@ int	run(char *line, t_data *data)
 	remove_quotes_from_token_list(list);
 	identify_tokens_list2(list);
 	// print_tokens_list(list);
-	data->exit_code = check_valid_list(list);
-	if(data->exit_code == 1)
-		return(1);
+	error = check_valid_list(list);
+	if(error == 1)
+	{
+		data->exit_code = 1;
+		return 1;
+	}
 	// printf("----------------------");
-	data->instr_list = make_final_list(list);
+	if((data->instr_list = make_final_list(list)) == NULL)
+	{
+		data->exit_code = 1;
+		return 1;
+	}
 	data->instr_list = make_final_list_heredoc(data->instr_list);
 	// execute(data.tokens, data.envp);
 	// print_final_list(data->instr_list);
@@ -134,6 +143,7 @@ int	run(char *line, t_data *data)
 	{
 		data->exit_code = the_real_actual_main(data);
 	}
+	// printf("exit code = %d\n", data->exit_code);
 	free_t_tokens(list);
 	free_2d_array(data->tokens);
 	free_t_node(data->instr_list);

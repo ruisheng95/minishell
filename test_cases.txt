@@ -14,6 +14,7 @@ echo echo
 echo "hello""world"
 echo "hello"world
 echo 0123"$USER"0123"$USER"0123
+echo """""" smth
 ---------------------------
 echo $USER
 echo "$USER"
@@ -27,6 +28,7 @@ echo $$ //cant use getpid lol so cant do this
 echo $ $ $ $
 echo "$"
 echo "$ $ $ $"
+echo $?
 ---------------------------
 echo -n test
 echo -nnn test
@@ -56,9 +58,11 @@ cd /Users
 cd /Users/(USER NAME)
 unset HOME + cd 
 unset HOME + cd $INVALID
+unset OLDPWD + cd
+unset PWD + cd
+
 
 //------------------------env------------------------//
-
 env
 
 ------------SHLVL--------------------
@@ -66,18 +70,68 @@ env (2)
 ./minishell + env (3)
 export SHLVL=99 + ./minishell + env (100)
 unset SHLVL + ./minishell + env (1)
+export SHLVL=abc + ./minishell + env (1)
+export SHLVL= + ./minishell + env (1)
 
------------
+------------PWD----------------------
+cd .. + env (OLDPWD and PWD updated)
+cd . + env (OLDPWD updated)
+unset PWD + cd .. + env (OLDWPWD updated)
+unset OLDPWD + cd .. + env(PWD updated)
 
 
+//---------------export-----------------//
+export (no equals)
+export (normal)
+export (wif quotes)
+export 1TEST=test [supposed to fail lol]
+export a=ec b=test
 
+
+///////////////////////////////////////////////
+-----------Errors and exit codes---------------
+///////////////////////////////////////////////
+
+-------redirs-------
+| (1)
+ls | (1)
+| ls (1)
+ls || (1)
+ls <> (1)
+ls <<< (1)
+> (1)
+cat < invalidfile (1)
+
+-------quotes-------
+echo "unclosed quote string (1)
+echo "'" (0)
+echo "'"' (1)
+
+------functions-----
+cat INVALIDFILE (1)
+INVALIDCMD (1)
+test (1)
+
+-----buildins-----
+echo test (0)
+cd invalid (1)
+export 1TEST=test (1)
 
 //////////////////////////////////////////////////////
-//-------------------Piping-------------------------//
+//-------------------Redir--------------------------//
 //////////////////////////////////////////////////////
+
+-------------Pipe---------------
 cat file | grep "smth valid"
+ls||
+|ls
+ls|
 
-
+-------------Infile---------------
+(valid file) < cat
+cat < (valid file)
+cat < (invalid file)
+cat <validfile1 <validfile2
 
 
 /////////////////////////////////////////////////////
@@ -85,12 +139,13 @@ cat file | grep "smth valid"
 /////////////////////////////////////////////////////
 \n
 $INVALID
-
-
+/bin/ls
+unset PATH + /bin/ls
+unset PATH + ls
+yes (weirdest command ever seen)
 
 
 /////////////////////////////////////////////
 //--------------failed, to fix-------------//
 /////////////////////////////////////////////
 env | grep "USER"
-

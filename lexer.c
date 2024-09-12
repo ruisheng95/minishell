@@ -176,7 +176,7 @@ int	check_valid_list(t_tokens *list)
 	{
 		if(check_operator(temp->type) == 1 && check_operator(temp->next->type) == 1)
 		{
-			ft_printf("syntax error near unexpected token '%s'", temp->token);
+			ft_printf("syntax error near unexpected token '%s'\n", temp->token);
 			return 1;
 		}
 		temp = temp->next;

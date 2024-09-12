@@ -135,6 +135,7 @@ void	change_env_pwd(t_data *data);
 void	free_t_tokens(t_tokens *obj);
 void	free_t_node(t_node *obj);
 void	free_t_cmd_list(t_cmd_list *obj);
+int		waitpid_and_get_exit_status(pid_t pid);
 
 //execve
 char	*get_path(char **envp, char *cmd);
@@ -190,4 +191,5 @@ char **unset_array(char **env, char *str);
 
 //cmdlist
 t_cmd_list *make_command_list(t_node *list);
+
 #endif
