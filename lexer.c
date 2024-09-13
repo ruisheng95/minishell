@@ -1,138 +1,154 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/13 18:56:22 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/13 20:59:39 by ethanlim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char **lexer(char *line, t_data *data)
+char	**lexer(char *line, t_data *data)
 {
-	t_lexing lexer;
+	t_lexing	lexer;
 
-	if(!line || line[0] == '\0')
-		return NULL;
+	if (!line || line[0] == '\0')
+		return (NULL);
 	if (init_lexer_struct(&lexer, data, line) == 1)
-		return NULL;
+		return (NULL);
 	while (lexer.line[lexer.i])
 	{
 		while (lexer.line[lexer.i] == ' ')
 			lexer.i++;
 		lexer.start = lexer.i;
-		// if (lexer.line[lexer.i] == '\'' || lexer.line[lexer.i] == '\"')
-		// {
-		// 	if (lexer_helper1(&lexer) == -1)
-		// 		return NULL;
-		// 	lexer.i++;
-		// }
-		if(lexer.line[lexer.i] == '|' || lexer.line[lexer.i] == '>' || lexer.line[lexer.i] == '<')
+		if (lexer.line[lexer.i] == '|' || lexer.line[lexer.i] == '>'
+			|| lexer.line[lexer.i] == '<')
 		{
 			lexer_helper2(&lexer);
 		}
 		else
 		{
-			if(lexer_helper3(&lexer) == -1)
-				return NULL;
+			if (lexer_helper3(&lexer) == -1)
+				return (NULL);
 		}
-		// if (lexer.line[lexer.i] == '\'' || lexer.line[lexer.i] == '\"')
-		// 	lexer.i++;
 		lexer.j++;
 	}
 	lexer.res[lexer.j] = NULL;
-	return lexer.res;
+	return (lexer.res);
 }
 
-t_tokens* init_token_list(t_data *data)
+t_tokens	*init_token_list(t_data *data)
 {
-    t_tokens *list;
-    t_tokens *last_node;
-	int i;
+	t_tokens	*list;
+	t_tokens	*last_node;
+	t_tokens	*newnode;
+	int			i;
 
 	if (!data || !data->tokens)
-        return NULL;
-    i = 0;
+		return (NULL);
+	i = 0;
 	list = NULL;
-    while(data->tokens[i])
-    {
-        t_tokens *newnode = malloc(sizeof(t_tokens));
-        if (!newnode)
-            return NULL;
-        newnode->token = data->tokens[i];
-        newnode->next = NULL;
-        newnode->prev = last_node;
-        if (!list)
-            list = newnode;
-        else
-            last_node->next = newnode;
-        last_node = newnode;
-        i++;
-    }
-    return list;
+	while (data->tokens[i])
+	{
+		newnode = malloc(sizeof(t_tokens));
+		if (!newnode)
+			return (NULL);
+		newnode->token = data->tokens[i];
+		newnode->next = NULL;
+		newnode->prev = last_node;
+		if (!list)
+			list = newnode;
+		else
+			last_node->next = newnode;
+		last_node = newnode;
+		i++;
+	}
+	return (list);
 }
+
 void	identify_tokens_list(t_tokens *tokens)
 {
-	while(tokens)
+	while (tokens)
 	{
-		if(tokens->token[0] == '|')
+		if (tokens->token[0] == '|')
 			tokens->type = Pipe;
-		else if(tokens->token[0] == '>')
+		else if (tokens->token[0] == '>')
 		{
-			if(tokens->token[1] == '>')
+			if (tokens->token[1] == '>')
 				tokens->type = redir_out_append;
 			else
 				tokens->type = redir_out_overwrite;
 		}
-		else if(tokens->token[0] == '<')
+		else if (tokens->token[0] == '<')
 		{
-			if(tokens->token[1] == '<')
+			if (tokens->token[1] == '<')
 				tokens->type = heredoc;
 			else
 				tokens->type = redir_input;
 		}
-		// else if(tokens->token[0] == '$')
-		// 	tokens->type = dollar_sign;
 		else
 			tokens->type = string;
 		tokens = tokens->next;
 	}
 }
 
-t_tokens *get_last_node(t_tokens *tokens)
+t_tokens	*get_last_node(t_tokens *tokens)
 {
-	t_tokens *list;
+	t_tokens	*list;
 
 	list = tokens;
-	while(list->next)
+	while (list->next)
 	{
 		list = list->next;
 	}
-	return list;
+	return (list);
+}
+
+int	identify_tokens_list_2_helper_cuz_norm(t_tokens *list)
+{
+	if (list->type == string && list->prev
+		&& (list->prev->type == Pipe || list->prev->type == infile
+			|| list->prev->type == outfile_append
+			|| list->prev->type == outfile_overwrite
+			|| list->prev->type == heredoc_lim))
+		return (command);
+	else if (list->type == string && list->prev
+			&& list->prev->type == redir_input)
+		return (infile);
+	else if (list->type == string && list->prev
+			&& list->prev->type == redir_out_overwrite)
+		return (outfile_overwrite);
+	else if (list->type == string && list->prev
+			&& list->prev->type == redir_out_append)
+		return (outfile_append);
+	else if (list->type == string && list->prev
+			&& list->prev->type == heredoc)
+		return (heredoc_lim);
+	else if (list->type == string)
+		return (arguments);
+	return (0);
 }
 
 void	identify_tokens_list2(t_tokens *list)
 {
-	t_tokens *first_token;
-	t_tokens *last_token;
+	t_tokens	*first_token;
+	t_tokens	*last_token;
 
 	first_token = list;
 	last_token = get_last_node(list);
-	if(!last_token)
+	if (!last_token)
 		return ;
-	while(list)
+	while (list)
 	{
-		if(list == first_token && list->type == string)
-		{
+		if (list == first_token && list->type == string)
 			list->type = command;
-		}
-		else
+		else if(list->type == string)
 		{
-			if(list->type == string && list->prev && (list->prev->type == Pipe || list->prev->type == infile || list->prev->type == outfile_append || list->prev->type == outfile_overwrite
-				|| list->prev->type == heredoc_lim))
-				list->type = command;
-			else if(list->type == string && list->prev && list->prev->type == redir_input)
-				list->type = infile;
-			else if(list->type == string && list->prev && list->prev->type == redir_out_overwrite)
-				list->type = outfile_overwrite;
-			else if(list->type == string && list->prev && list->prev->type == redir_out_append)
-				list->type = outfile_append;
-			else if(list->type == string && list->prev && list->prev->type == heredoc)
-				list->type = heredoc_lim;
-			else if(list->type == string)
-				list->type = arguments;
+			list->type = identify_tokens_list_2_helper_cuz_norm(list);
 		}
 		list = list->next;
 	}
@@ -143,14 +159,14 @@ int check_operator(int n)
 	if(n == Pipe || n == redir_input
 		|| n == redir_out_append || n == redir_out_overwrite
 		|| n == heredoc)
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 int	check_valid_list(t_tokens *list)
 {
-	t_tokens *last_node;
-	t_tokens *first_node;
-	t_tokens *temp;
+	t_tokens	*last_node;
+	t_tokens	*first_node;
+	t_tokens	*temp;
 
 	first_node = list;
 	last_node = get_last_node(list);
@@ -159,12 +175,12 @@ int	check_valid_list(t_tokens *list)
 	if(first_node->type == Pipe)
 	{
 		ft_printf("syntax error near unexpected token '|'\n", last_node->token);
-		return 1;
+		return (1);
 	}
 	if(check_operator(last_node->type) == 1)
 	{
 		ft_printf("syntax error near unexpected token '%s'\n", last_node->token);
-		return 1;
+		return (1);
 	}
 	if(last_node->type == dollar_sign && last_node->prev)
 	{
@@ -177,16 +193,17 @@ int	check_valid_list(t_tokens *list)
 		if(check_operator(temp->type) == 1 && check_operator(temp->next->type) == 1)
 		{
 			ft_printf("syntax error near unexpected token '%s'\n", temp->token);
-			return 1;
+			return (1);
 		}
 		temp = temp->next;
 	}
-	return 0;
+	return (0);
 }
 
 void print_tokens_list(t_tokens *list) 
 {
-	int i = 0;
+	int	i;
+	i = 0;
     while (list != NULL) 
 	{
         printf("token %d : %s, type : %d\n", i, list->token, list->type);
@@ -197,7 +214,9 @@ void print_tokens_list(t_tokens *list)
 
 void	print_token_array(char **str)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	if(!str)
 	{
 		printf("ERORRR LOLLL\n");
@@ -213,7 +232,7 @@ void	print_token_array(char **str)
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_tokens *list;
-// 	char *str = "$INVALID";
+// 	char *str = "echo hello > outfile";
 // 	t_data data;
 // 	data.envp = envp;
 // 	if((data.tokens = lexer(str, &data)) == NULL)

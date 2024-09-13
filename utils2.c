@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:13:12 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 18:03:51 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:20:50 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ char	*inc_shell_lvl_helper_cuz_norm(char *str)
 	shellvl++;
 	temp2 = ft_itoa(shellvl);
 	res = ft_strjoin("SHLVL=", temp2);
-	// free(temp);
-	// free(temp2);
-	// free(str);
+	free(temp);
+	free(temp2);
+	free(str);
 	return (res);
 }
 

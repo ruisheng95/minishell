@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:51:35 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 18:00:25 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:20:22 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	*expand_string(char *line, t_data *data)
 			res[i++] = line[j++];
 	}
 	res[i] = '\0';
-	// free(line);
 	return (res);
 }
 

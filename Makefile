@@ -64,7 +64,7 @@ re: fclean all
 bonus : fclean $(BONUS_NAME)
 
 testlex:
-	gcc expansion.c lexer.c lexer2.c lexer3.c libft.a 
+	gcc expansion.c lexer.c lexer2.c lexer3.c libft.a expansion2.c
 
 testlist:
 	gcc expansion.c lexer.c lexer2.c parsing_list.c libft.a lexer3.c

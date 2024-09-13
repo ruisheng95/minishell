@@ -150,4 +150,5 @@ export TEST="echo hello" + $TEST
 /////////////////////////////////////////////
 //--------------failed, to fix-------------//
 /////////////////////////////////////////////
-env | grep "USER"
+
+env | grep "USER" (temporary fixed)
