@@ -1,32 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer2.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/13 21:56:01 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/13 22:06:41 by ethanlim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int handle_quotes(char *line, int i)
-{
-	if (line[i] == '\'')
-	{
-		i++;
-		while (line[i] && line[i] != '\'')
-			i++;
-		if (line[i] == '\0')
-		{
-			printf("Unclosed quote detected\n");
-			return -1;
-		}
-	}
-	else if (line[i] == '\"')
-	{
-		i++;
-		while (line[i] && line[i] != '\"')
-			i++;
-		if (line[i] == '\0')
-		{
-			printf("Unclosed quote detected\n");
-			return -1;
-		}
-	}
-	i--;
-	return i;
-}
+// int handle_quotes(char *line, int i)
+// {
+// 	if (line[i] == '\'')
+// 	{
+// 		i++;
+// 		while (line[i] && line[i] != '\'')
+// 			i++;
+// 		if (line[i] == '\0')
+// 		{
+// 			printf("Unclosed quote detected\n");
+// 			return -1;
+// 		}
+// 	}
+// 	else if (line[i] == '\"')
+// 	{
+// 		i++;
+// 		while (line[i] && line[i] != '\"')
+// 			i++;
+// 		if (line[i] == '\0')
+// 		{
+// 			printf("Unclosed quote detected\n");
+// 			return -1;
+// 		}
+// 	}
+// 	i--;
+// 	return i;
+// }
 
 // char	*substr_expand(char *line, t_lexing *lexer, int i, int start)
 // {
@@ -47,7 +59,8 @@ int handle_quotes(char *line, int i)
 // 			return -1;
 // 		else
 // 			lexer->i = handle_quotes(lexer->line, lexer->i) + 1;
-// 		lexer->res[lexer->j] = ft_substr(lexer->line, lexer->start, lexer->i - lexer->start);
+// 		lexer->res[lexer->j] = ft_substr(lexer->line, lexer->start,
+// 		lexer->i - lexer->start);
 // 	}
 // 	else
 // 	{
@@ -55,15 +68,16 @@ int handle_quotes(char *line, int i)
 // 			return -1;
 // 		else
 // 			lexer->i = handle_quotes(lexer->line, lexer->i) + 1;
-// 		lexer->res[lexer->j] = substr_expand(lexer->line, lexer, lexer->i, lexer->start);
+// 		lexer->res[lexer->j] = substr_expand(lexer->line,
+//		lexer, lexer->i, lexer->start);
 // 	}
 // 	return 0;
 // }
 
 int	lexer_helper2(t_lexing *lexer)
 {
-	if ((lexer->line[lexer->i] == '>' && lexer->line[lexer->i + 1] == '>') || (lexer->line[lexer->i] == '<'
-		&& lexer->line[lexer->i + 1] == '<'))
+	if ((lexer->line[lexer->i] == '>' && lexer->line[lexer->i + 1] == '>')
+		|| (lexer->line[lexer->i] == '<' && lexer->line[lexer->i + 1] == '<'))
 	{
 		lexer->res[lexer->j] = ft_substr(lexer->line, lexer->i, 2);
 		lexer->i += 2;
@@ -73,40 +87,42 @@ int	lexer_helper2(t_lexing *lexer)
 		lexer->res[lexer->j] = ft_substr(lexer->line, lexer->i, 1);
 		lexer->i++;
 	}
-	return 0;
+	return (0);
 }
 
-int lexer_helper3(t_lexing *lexer)
+int	print_unclosed_quotes(void)
+{
+	printf("unclosed quote detected\n");
+	return (-1);
+}
+
+int	lexer_helper3(t_lexing *lexer)
 {
 	while (lexer->line[lexer->i] && lexer->line[lexer->i] != ' '
-			&& lexer->line[lexer->i] != '|' && lexer->line[lexer->i] != '>' && lexer->line[lexer->i] != '<')
-				{
-					if(lexer->line[lexer->i] == '\'')
-					{
-						lexer->i++;
-						while(lexer->line[lexer->i] && lexer->line[lexer->i] != '\'')
-							lexer->i++;
-						if(lexer->line[lexer->i] == '\0')
-						{
-							printf("unclosed quote detected\n");
-							return -1;
-						}
-					}
-					if(lexer->line[lexer->i] == '\"')
-					{
-						lexer->i++;
-						while(lexer->line[lexer->i] && lexer->line[lexer->i] != '\"')
-							lexer->i++;
-						if(lexer->line[lexer->i] == '\0')
-						{
-							printf("unclosed quote detected\n");
-							return -1;
-						}
-					}
-					lexer->i++;
-				}
-	lexer->res[lexer->j] = ft_substr(lexer->line, lexer->start, lexer->i - lexer->start);
-	return 0;
+		&& lexer->line[lexer->i] != '|' && lexer->line[lexer->i] != '>'
+		&& lexer->line[lexer->i] != '<')
+	{
+		if (lexer->line[lexer->i] == '\'')
+		{
+			lexer->i++;
+			while (lexer->line[lexer->i] && lexer->line[lexer->i] != '\'')
+				lexer->i++;
+			if (lexer->line[lexer->i] == '\0')
+				return (print_unclosed_quotes());
+		}
+		if (lexer->line[lexer->i] == '\"')
+		{
+			lexer->i++;
+			while (lexer->line[lexer->i] && lexer->line[lexer->i] != '\"')
+				lexer->i++;
+			if (lexer->line[lexer->i] == '\0')
+				return (print_unclosed_quotes());
+		}
+		lexer->i++;
+	}
+	lexer->res[lexer->j] = ft_substr(lexer->line, lexer->start,
+			lexer->i - lexer->start);
+	return (0);
 }
 
 int	count_lexer_array(char *line)
@@ -116,22 +132,23 @@ int	count_lexer_array(char *line)
 
 	count = 3;
 	i = 0;
-	while(line[i])
+	while (line[i])
 	{
-		if(line[i] == '\"' || line[i] == '\'')
+		if (line[i] == '\"' || line[i] == '\'')
 		{
 			i++;
-			while(line[i] && (line[i] == '\"' || line[i] == '\''))
+			while (line[i] && (line[i] == '\"' || line[i] == '\''))
 				i++;
 			count++;
-			if(line[i] == '\0')
-				return count;
+			if (line[i] == '\0')
+				return (count);
 		}
-		if(line[i] == ' ' || line[i] == '|' || line[i] == '>' || line[i] == '<')
+		if (line[i] == ' ' || line[i] == '|'
+			|| line[i] == '>' || line[i] == '<')
 			count++;
 		i++;
 	}
-	return count;
+	return (count);
 }
 
 int	init_lexer_struct(t_lexing *lexer, t_data *data, char *line)
@@ -146,7 +163,7 @@ int	init_lexer_struct(t_lexing *lexer, t_data *data, char *line)
 	if (!lexer->res)
 	{
 		printf("Memory allocation failed\n");
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }

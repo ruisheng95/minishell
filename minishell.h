@@ -158,6 +158,10 @@ void	tokens_list_processing(t_tokens *list);
 void	remove_quotes_from_token_list(t_tokens *list);
 char	**semi_ft_split(char *line);
 
+//lexer4
+int	check_valid_list(t_tokens *list);
+t_tokens	*get_last_node(t_tokens *tokens);
+
 //parse_list
 t_node	*make_final_list(t_tokens *tokens);
 t_node	*make_final_list_heredoc(t_node *list);
@@ -175,7 +179,6 @@ int	env(t_data *data);
 int cd(char **cmd, t_data *data);
 
 void	print_token_array(char **str);
-int	check_valid_list(t_tokens *list);
 int check_operator(int n);
 void	identify_tokens_list2(t_tokens *list);
 void	identify_tokens_list(t_tokens *tokens);

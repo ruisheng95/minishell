@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:56:22 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 20:59:39 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/13 21:50:37 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,18 +96,6 @@ void	identify_tokens_list(t_tokens *tokens)
 	}
 }
 
-t_tokens	*get_last_node(t_tokens *tokens)
-{
-	t_tokens	*list;
-
-	list = tokens;
-	while (list->next)
-	{
-		list = list->next;
-	}
-	return (list);
-}
-
 int	identify_tokens_list_2_helper_cuz_norm(t_tokens *list)
 {
 	if (list->type == string && list->prev
@@ -117,16 +105,16 @@ int	identify_tokens_list_2_helper_cuz_norm(t_tokens *list)
 			|| list->prev->type == heredoc_lim))
 		return (command);
 	else if (list->type == string && list->prev
-			&& list->prev->type == redir_input)
+		&& list->prev->type == redir_input)
 		return (infile);
 	else if (list->type == string && list->prev
-			&& list->prev->type == redir_out_overwrite)
+		&& list->prev->type == redir_out_overwrite)
 		return (outfile_overwrite);
 	else if (list->type == string && list->prev
-			&& list->prev->type == redir_out_append)
+		&& list->prev->type == redir_out_append)
 		return (outfile_append);
 	else if (list->type == string && list->prev
-			&& list->prev->type == heredoc)
+		&& list->prev->type == heredoc)
 		return (heredoc_lim);
 	else if (list->type == string)
 		return (arguments);
@@ -146,7 +134,7 @@ void	identify_tokens_list2(t_tokens *list)
 	{
 		if (list == first_token && list->type == string)
 			list->type = command;
-		else if(list->type == string)
+		else if (list->type == string)
 		{
 			list->type = identify_tokens_list_2_helper_cuz_norm(list);
 		}
@@ -154,80 +142,35 @@ void	identify_tokens_list2(t_tokens *list)
 	}
 }
 
-int check_operator(int n)
-{
-	if(n == Pipe || n == redir_input
-		|| n == redir_out_append || n == redir_out_overwrite
-		|| n == heredoc)
-		return (1);
-	return (0);
-}
-int	check_valid_list(t_tokens *list)
-{
-	t_tokens	*last_node;
-	t_tokens	*first_node;
-	t_tokens	*temp;
+// void	print_tokens_list(t_tokens *list)
+// {
+// 	int	i;
 
-	first_node = list;
-	last_node = get_last_node(list);
-	temp = list;
+// 	i = 0;
+// 	while (list != NULL)
+// 	{
+// 		printf("token %d : %s, type : %d\n", i, list->token, list->type);
+// 		list = list->next;
+// 		i++;
+// 	}
+// }
 
-	if(first_node->type == Pipe)
-	{
-		ft_printf("syntax error near unexpected token '|'\n", last_node->token);
-		return (1);
-	}
-	if(check_operator(last_node->type) == 1)
-	{
-		ft_printf("syntax error near unexpected token '%s'\n", last_node->token);
-		return (1);
-	}
-	if(last_node->type == dollar_sign && last_node->prev)
-	{
-		last_node->prev->token = ft_strjoin(last_node->prev->token, last_node->token);
-		free(last_node);
-		last_node->prev->next = NULL;
-	}
-	while(temp->next)
-	{
-		if(check_operator(temp->type) == 1 && check_operator(temp->next->type) == 1)
-		{
-			ft_printf("syntax error near unexpected token '%s'\n", temp->token);
-			return (1);
-		}
-		temp = temp->next;
-	}
-	return (0);
-}
+// void	print_token_array(char **str)
+// {
+// 	int	i;
 
-void print_tokens_list(t_tokens *list) 
-{
-	int	i;
-	i = 0;
-    while (list != NULL) 
-	{
-        printf("token %d : %s, type : %d\n", i, list->token, list->type);
-        list = list->next;
-		i++;
-    }
-}
-
-void	print_token_array(char **str)
-{
-	int	i;
-
-	i = 0;
-	if(!str)
-	{
-		printf("ERORRR LOLLL\n");
-		return ;
-	}
-	while(str[i])
-	{
-		printf("token %d = %s\n", i, str[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	if (!str)
+// 	{
+// 		printf("ERORRR LOLLL\n");
+// 		return ;
+// 	}
+// 	while (str[i])
+// 	{
+// 		printf("token %d = %s\n", i, str[i]);
+// 		i++;
+// 	}
+// }
 
 // int	main(int argc, char **argv, char **envp)
 // {
