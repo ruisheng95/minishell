@@ -1,19 +1,96 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expansion.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/13 15:51:35 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/13 18:00:25 by ethanlim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	*get_expand_string(char *str, char **envp)
+int	expand_string_helper_cuz_norminette(char **res, char *line,
+	int *i, t_data *data)
 {
+	int		j;
 	char	*temp;
-	char	*temp2;
-	int i = 0;
 
-	temp2 = ft_strjoin(str, "=");
-	while(envp[i] != NULL && ft_strncmp(envp[i], temp2, ft_strlen(temp2)) != 0)
-		i++;
-	if (envp[i] == NULL)
-		return NULL; 
-	temp = ft_substr(envp[i], ft_strlen(str) + 1, ft_strlen(envp[i]));
-	free(temp2);
-	return temp;
+	j = 0;
+	if (line[j + 1] == '\0' || line[j + 1] == '\"'
+		|| line [j + 1] == '\'' || line[j + 1] == '\"' || line[j + 1] == ' ')
+		(*res)[(*i)++] = '$';
+	else if (line[j + 1] == '?')
+	{
+		(*res)[(*i)++] = data->exit_code + '0';
+		j++;
+	}
+	else
+	{
+		temp = get_expand_string(get_substr(line, j), data->envp);
+		(*i) = copy_substr(&(*res), temp, (*i));
+		j++;
+		while (line[j] && line[j] != ' '
+			&& line[j] != '$' && line[j] != '\'' && line[j] != '\"')
+			j++;
+		j--;
+	}
+	j++;
+	return (j);
+}
+
+void	expand_string_helper_cuz_norminette_2(char **res, char *line,
+	int *i, int *j)
+{
+	(*res)[(*i)++] = line[(*j)++];
+	while (line[(*j)] && line[(*j)] != '\'')
+		(*res)[(*i)++] = line[(*j)++];
+	(*res)[(*i)++] = line[(*j)++];
+}
+
+char	*expand_string(char *line, t_data *data)
+{
+	int		i;
+	char	*res;
+	int		double_quotes_flag;
+	int		j;
+
+	j = 0;
+	i = 0;
+	res = malloc(sizeof(char) * 1000000);
+	double_quotes_flag = 0;
+	while (line[j])
+	{
+		if (line[j] == '\"')
+		{
+			res[i++] = line[j++];
+			double_quotes_flag = !(double_quotes_flag);
+		}
+		else if (line[j] == '$')
+			j += expand_string_helper_cuz_norminette(&res, line + j, &i, data);
+		else if (line[j] == '\'' && double_quotes_flag == 0)
+			expand_string_helper_cuz_norminette_2(&res, line, &i, &j);
+		else
+			res[i++] = line[j++];
+	}
+	res[i] = '\0';
+	// free(line);
+	return (res);
+}
+
+void	expansion(t_tokens *list, t_data *data)
+{
+	t_tokens	*templist;
+
+	templist = list;
+	while (templist)
+	{
+		if (templist->type == string)
+			templist->token = expand_string(templist->token, data);
+		templist = templist->next;
+	}
 }
 
 // char	*expansion(char *line, t_lexing *lexer)
@@ -71,118 +148,6 @@ char	*get_expand_string(char *str, char **envp)
 // 	res[i] = '\0';
 // 	return res;
 // }
-
-int	copy_substr(char **res, char *substr, int i)
-{
-	char *str = *res;
-	int	j;
-
-	j = 0;
-	if(!substr)
-		return i;
-	while(substr[j])
-	{
-		str[i] = substr[j];
-		i++;
-		j++;
-	}
-	free(substr);
-	return i;
-}
-
-char*		get_substr(char *line, int i)
-{
-	int j;
-	char	*res;
-
-	j = i + 1;
-	while(line[j] && line[j] != ' ' && line[j] != '\"' && line[j] != '$' && line[j] != '\'')
-		j++;
-	res = ft_substr(line, i + 1, j - (i + 1));
-	return res;
-}
-
-char	*expand_string(char *line, t_data *data)
-{
-	int i = 0;
-	char	*res = malloc(sizeof(char) * 1000000);
-	char	*temp;
-	int		double_quotes_flag;
-	int j;
-
-	j = 0;
-	double_quotes_flag = 0;
-	while(line[j])
-	{
-		if(line[j] == '\"')
-		{
-			res[i] = line[j];
-			i++;
-			j++;
-			if(double_quotes_flag == 0)
-				double_quotes_flag = 1;
-			else
-				double_quotes_flag = 0;
-		}
-		else if(line[j] == '$')
-		{
-			if(line[j + 1] == '\0' || line[j + 1] == '\"' || line [j + 1] == '\'' || line[j + 1] == '\"')
-			{
-				res[i] = '$';
-				i++;
-				j++;
-			}
-			else if(line[j + 1] == '?')
-			{
-				res[i] = data->exit_code + '0';
-				i++;
-				j += 2;
-			}
-			else
-			{
-				temp = get_expand_string(get_substr(line, j), data->envp);
-				// printf("%s\n", get_substr(line, j));
-				i = copy_substr(&res, temp, i);
-				j++;
-				while(line[j] && line[j] != ' ' && line[j] != '$' && line[j] != '\'' && line[j] != '\"')
-					j++;
-			}
-		}
-		else if(line[j] == '\'' && double_quotes_flag == 0)
-		{
-			res[i++] = line[j++];
-			while(line[j] && line[j] != '\'')
-			{
-				res[i] = line[j];
-				i++;
-				j++;
-			}
-			res[i++] = line[j++];
-		}
-		else
-		{
-			res[i] = line[j];
-			i++;
-			j++;
-		}
-	}
-	res[i] = '\0';
-	return res;
-}
-
-
-void	expansion(t_tokens *list, t_data *data)
-{
-	t_tokens	*templist;
-	
-	templist = list;
-	while(templist)
-	{
-		if(templist->type == string)
-			templist->token = expand_string(templist->token, data);
-		templist = templist->next;
-	}
-}
 
 // int main(int argc, char **argv, char **envp)
 // {

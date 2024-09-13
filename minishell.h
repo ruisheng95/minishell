@@ -121,8 +121,12 @@ extern void rl_replace_line(const char *, int);
 char **lexer(char *line, t_data *data);
 
 //expansion
-char	*get_expand_string(char *str, char **envp);
 void	expansion(t_tokens *list, t_data *data);
+
+//expansion2
+int	copy_substr(char **res, char *substr, int i);
+char	*get_expand_string(char *str, char **envp);
+char	*get_substr(char *line, int i);
 
 //utils
 void	free_2d_array(char **str);

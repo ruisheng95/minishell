@@ -4,6 +4,7 @@ void	print_cmd_list(t_cmd_list *list);
 
 void	signal_handler(int sig)
 {
+	(void)sig;
 	ft_printf("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
@@ -105,7 +106,6 @@ int the_real_actual_main(t_data *data)
 int	run(char *line, t_data *data)
 {
 	t_tokens	*list;
-	pid_t	pid;
 	int		error = 0;
 
 	data->input_line = line;
@@ -162,11 +162,12 @@ void	init_data_struct(t_data *data, char **envp)
 
 int main(int argc, char **argv, char **envp) 
 {
-	pid_t	pid;
 	t_data	data;
 	char	*line;
 	// char	*readline_prompt;
 
+	(void)(argc);
+	(void)(argv);
 	init_data_struct(&data, envp);
 	signal(SIGQUIT, SIG_IGN);
     while (1)

@@ -1,21 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/13 15:45:55 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/13 15:48:07 by ethanlim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char **unset_array(char **env, char *str)
+char	**unset_array(char **env, char *str)
 {
-	char **tempenv;
+	char	**tempenv;
 	char	*s;
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
 	tempenv = malloc((total_strings(env) + 1) * sizeof(char *));
+	if (!tempenv)
+		return (NULL);
 	s = ft_strjoin(str, "=");
-	if(!tempenv)
-		return NULL;
-	while(env[i])
+	while (env[i])
 	{
-		if(ft_strncmp(env[i], s, ft_strlen(s)) != 0)
+		if (ft_strncmp(env[i], s, ft_strlen(s)) != 0)
 		{
 			tempenv[j] = ft_strdup(env[i]);
 			j++;
@@ -23,39 +35,38 @@ char **unset_array(char **env, char *str)
 		i++;
 	}
 	tempenv[j] = NULL;
-	return tempenv;
+	return (tempenv);
 }
 
-int unset(char ***env, char **str)
+int	unset(char ***env, char **str)
 {
 	char	**tempenv;
 	int		i;
 
 	i = 0;
-	if(!str)
-		return 0;
-	while(str[i])
+	if (!str)
+		return (0);
+	while (str[i])
 	{
 		tempenv = unset_array(*env, str[i]);
 		free_2d_array(*env);
 		*env = tempenv;
 		i++;
 	}
-	// print_env(*env);
-	return 0;
+	return (0);
 }
 
-void	print_env(char **env)
-{
-	int i;
+// void	print_env(char **env)
+// {
+// 	int i;
 
-	i = 0;
-	while(env[i])
-	{
-		printf("%s\n", env[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (env[i])
+// 	{
+// 		printf("%s\n", env[i]);
+// 		i++;
+// 	}
+// }
 
 // int main(int argc, char **argv, char **envp)
 // {

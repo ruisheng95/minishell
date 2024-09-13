@@ -135,7 +135,6 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 	char	*path;
 	pid_t	pid;
 	int		exit_status;
-	int		n;
 
 	if (cmd == NULL)
 		exit_error(0);

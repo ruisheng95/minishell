@@ -23,6 +23,7 @@ echo 0123"$USER"0123
 echo '$USER'
 echo "'$invalid'"
 echo "'$invalid'"
+echo "0123$ $ $USER"
 echo $
 echo $$ //cant use getpid lol so cant do this
 echo $ $ $ $
@@ -143,7 +144,8 @@ $INVALID
 unset PATH + /bin/ls
 unset PATH + ls
 yes (weirdest command ever seen)
-
+export a=ec + export b="ho hi" + $a$b
+export TEST="echo hello" + $TEST
 
 /////////////////////////////////////////////
 //--------------failed, to fix-------------//

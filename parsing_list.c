@@ -48,7 +48,6 @@ t_node	*make_final_list(t_tokens *tokens)
 
 	token = tokens;
 	int i = 0;
-	int j = 0;
 	while(token)
 	{
 		newnode = malloc(sizeof(t_node));
@@ -171,7 +170,7 @@ t_node	*make_final_list(t_tokens *tokens)
 t_node	*make_final_list_heredoc(t_node *list)
 {
 	t_node	*head_node;
-	t_node	*heredoc_node;
+	// t_node	*heredoc_node;
 	t_node 	*newnode;
 
 	head_node = list;
