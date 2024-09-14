@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 21:49:14 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/14 15:00:39 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 02:01:46 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	check_valid_list_helper_cuz_norminette(t_tokens *first_node,
 	if (first_node->type == Pipe || check_operator(last_node->type) == 1)
 	{
 		if (check_operator(last_node->type) == 1)
-			printf("syntax error near unexpected token 'newline'\n");
+			printf("syntax error near unexpected token '%s'\n", last_node->token);
 		else
 			printf("syntax error near unexpected token '|'\n");
 		return (1);
@@ -61,9 +61,9 @@ int	check_valid_list(t_tokens *list)
 	while (temp->next)
 	{
 		if (check_operator(temp->type) == 1
-			&& check_operator(temp->next->type) == 1 && temp->next == last_node)
+			&& check_operator(temp->next->type) == 1)
 		{
-			ft_printf("syntax error near unexpected token 'newline'\n", temp->token);
+			ft_printf("syntax error near unexpected token '%s'\n", temp->token);
 			return (1);
 		}
 		temp = temp->next;

@@ -174,3 +174,6 @@ export TEST="echo hello" + $TEST
 /////////////////////////////////////////////
 
 env | grep "USER" (temporary fixed)
+export GHOST=123 | env | grep GHOST (not supposed to work lol)
+
+rng pls help me fix the pipe D:

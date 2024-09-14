@@ -90,7 +90,7 @@ int buildins(char **cmd, t_data **data)
 	}
 	if(ft_strcmp(cmd[0], "exit") == 0)
 	{
-		return(exit_process(cmd));
+		return(exit_process(cmd, *data));
 	}
 	return 0;
 }
@@ -99,10 +99,6 @@ void	prepare_fd(t_cmd_list *templist, t_data *data)
 {
 	dup2(templist->in_fd, 0);
 	dup2(templist->out_fd, 1);
-	// if (templist->in_fd != 0)
-	// 	close(templist->in_fd);
-	// if(templist->out_fd != 1)
-	// 	close(templist->out_fd);
 	for (int i = 3; i < 1000; i++)
 	{
 		if(i != data->saved_in_fd && i != data->saved_out_fd)
