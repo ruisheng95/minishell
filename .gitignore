@@ -1,7 +1,8 @@
 *.o
 a.out
 *.a
-outfile
+outfile1
+infile2
 testfile
 .DS_Store
 minishell
