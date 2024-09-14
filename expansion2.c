@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:47:30 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 16:48:31 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/14 21:50:08 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*get_expand_string(char *str, char **envp)
 		return (NULL);
 	temp = ft_substr(envp[i], ft_strlen(str) + 1, ft_strlen(envp[i]));
 	free(temp2);
+	free(str);
 	return (temp);
 }
 
