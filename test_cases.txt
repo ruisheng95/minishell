@@ -119,6 +119,9 @@ echo test (0)
 cd invalid (1)
 export 1TEST=test (1)
 
+----extra------
+./a.out (0)
+
 //////////////////////////////////////////////////////
 //-------------------Redir--------------------------//
 //////////////////////////////////////////////////////
@@ -148,6 +151,8 @@ cat infile1 >>outfile + cat infile2 >>outfile
 
 -------------combined-----------------
 < infile cat | sort > outfile
+cat < infile | ls
+echo hi | echo bye > outfile
 
 
 /////////////////////////////////////////////////////
@@ -161,6 +166,8 @@ unset PATH + ls
 yes (weirdest command ever seen)
 export a=ec + export b="ho hi" + $a$b
 export TEST="echo hello" + $TEST
+./minishell
+./a.out
 
 /////////////////////////////////////////////
 //--------------failed, to fix-------------//

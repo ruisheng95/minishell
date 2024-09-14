@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer3.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/14 19:00:53 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/14 19:05:07 by ethanlim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	handle_quotes_increment(char *line, int i)
@@ -5,17 +17,17 @@ int	handle_quotes_increment(char *line, int i)
 	if (line[i] == '\'')
 	{
 		i++;
-		while(line[i] && line[i] != '\'')
+		while (line[i] && line[i] != '\'')
 			i++;
-	if (line[i])
-		i++;
+		if (line[i])
+			i++;
 	}
 	if (line[i] == '\"')
 	{
 		i++;
-		while(line[i] && line[i] != '\"')
+		while (line[i] && line[i] != '\"')
 			i++;
-		if(line[i])
+		if (line[i])
 			i++;
 	}
 	return (i);
@@ -23,10 +35,10 @@ int	handle_quotes_increment(char *line, int i)
 
 char	**semi_ft_split(char *line)
 {
-	int	i;
-	int	start;
+	int		i;
+	int		start;
 	char	**res;
-	int	j;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -47,124 +59,53 @@ char	**semi_ft_split(char *line)
 		j++;
 	}
 	free(line);
-	return res;
+	return (res);
+}
+
+void	insert_split_tokens(t_tokens *node, char **stringsarray)
+{
+	t_tokens	*newnode;
+	t_tokens	*lastnode;
+	t_tokens	*tempnode;
+	int			i;
+
+	i = 1;
+	lastnode = node;
+	tempnode = node->next;
+	while (stringsarray[i])
+	{
+		newnode = malloc(sizeof(t_tokens));
+		newnode->type = string;
+		newnode->token = stringsarray[i];
+		newnode->prev = lastnode;
+		lastnode->next = newnode;
+		lastnode = newnode;
+		i++;
+	}
+	lastnode->next = tempnode;
 }
 
 void	tokens_list_processing(t_tokens *list)
 {
 	t_tokens	*templist;
-	t_tokens	*newnode;
-	t_tokens	*lastnode;
+	char		**stringsarray;
 	t_tokens	*tempnode;
-	char	**stringsarray;
-	int		i;
 
 	templist = list;
-	while(templist)
+	while (templist)
 	{
-		if(templist->type == string)
+		if (templist->type == string)
 		{
-			i = 1;
 			stringsarray = semi_ft_split(templist->token);
 			templist->token = stringsarray[0];
-			lastnode = templist;
-			tempnode = templist->next;
-			if(stringsarray[1])
+			if (stringsarray[1])
 			{
-				while(stringsarray[i])
-				{
-					newnode = malloc(sizeof(t_tokens));
-					newnode->type = string;
-					newnode->token = stringsarray[i];
-					newnode->prev = lastnode;
-					lastnode->next = newnode;
-					lastnode = newnode;
-					i++;
-				}
-				lastnode->next = tempnode;
-				templist = lastnode;
+				tempnode = templist->next;
+				insert_split_tokens(templist, stringsarray);
+				while (templist->next && templist->next != tempnode)
+					templist = templist->next;
 			}
 			free(stringsarray);
-		}
-		templist = templist->next;
-	}
-}
-
-void	remove_quotes_helper_cuz_norminette(char *line, char **res, int *i, int *j)
-{
-	if (line[(*i)++] == '\'')
-	{
-		while (line[(*i)] && line[(*i)] != '\'')
-			(*res)[(*j)++] = line[(*i)++];
-		(*i)++;
-	}
-	else if (line[(*i)++] == '\"')
-	{
-		while (line[(*i)] && line[(*i)] != '\"')
-			(*res)[(*j)++] = line[(*i)++];
-		(*i)++;
-	}
-}
-
-char	*remove_quotes(char *line)
-{
-	char	*res;
-	int		i;
-	int		j;
-
-	if(!line || line[0] == '\0')
-		return NULL;
-	i = 0;
-	j = 0;
-	res = malloc(sizeof(char) * ft_strlen(line) + 1);
-	while(line[i])
-	{
-		if(line[i] == '\'')
-		{
-			i++;
-			while(line[i] && line[i] != '\'')
-			{
-				res[j] = line[i];
-				i++;
-				j++;
-			}
-			i++;
-		}
-		else if(line[i] == '\"')
-		{
-			i++;
-			while(line[i] && line[i] != '\"')
-			{
-				res[j] = line[i];
-				i++;
-				j++;
-			}
-			i++;
-		}
-		else
-		{
-			res[j] = line[i];
-			i++;
-			j++;
-		}
-	}
-	res[j] = '\0';
-	return (res);
-}
-
-void	remove_quotes_from_token_list(t_tokens *list)
-{
-	t_tokens	*templist;
-	char		*tempptr;
-
-	templist = list;
-	while(templist)
-	{
-		if(templist->type == string)
-		{
-			tempptr = templist->token;
-			templist->token = remove_quotes(templist->token);
-			free(tempptr);
 		}
 		templist = templist->next;
 	}
