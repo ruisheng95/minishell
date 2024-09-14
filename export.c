@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:18:56 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 17:50:57 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/14 15:14:36 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ int	export(char ***env, char **str)
 		return (print_sorted_env(tempenv));
 	while (str[i])
 	{
-		if (ft_isdigit(str[i][0]) == 1 || check_str(str[i]) != 0)
+		if (ft_isdigit(str[i][0]) == 1 || check_str(str[i]) != 0 || str[i][0] == '=')
 		{
 			if (tempsubstr)
 				free(tempsubstr);
@@ -138,7 +138,7 @@ int	export(char ***env, char **str)
 			*env = tempenv;
 			if (check_str(str[i]) != 2)
 				printf("Error: export: '%s': not a valid identifier\n", str[i]);
-			if (check_str(str[i]) == 2)
+			if (check_str(str[i]) == 2 && ft_isdigit(str[i][0]) == 0)
 				return (0);
 			return (1);
 		}

@@ -1,5 +1,26 @@
 #include "minishell.h"
 
+int	handle_quotes_increment(char *line, int i)
+{
+	if (line[i] == '\'')
+	{
+		i++;
+		while(line[i] && line[i] != '\'')
+			i++;
+	if (line[i])
+		i++;
+	}
+	if (line[i] == '\"')
+	{
+		i++;
+		while(line[i] && line[i] != '\"')
+			i++;
+		if(line[i])
+			i++;
+	}
+	return (i);
+}
+
 char	**semi_ft_split(char *line)
 {
 	int	i;
@@ -10,37 +31,25 @@ char	**semi_ft_split(char *line)
 	i = 0;
 	j = 0;
 	res = malloc(sizeof(char *) * count_lexer_array(line));
-	while(line[i])
+	while (line[i])
 	{
-		while(line[i] && line[i] == ' ')
+		while (line[i] && line[i] == ' ')
 			i++;
 		start = i;
-		while(line[i] && (line[i] != ' '))
+		while (line[i] && (line[i] != ' '))
 		{
-			if(line[i] == '\'')
-			{
-				i++;
-				while(line[i] && line[i] != '\'')
-					i++;
-				if(line[i])
-					i++;
-			}
-			if(line[i] == '\"')
-			{
-				i++;
-				while(line[i] && line[i] != '\"')
-					i++;
-				if(line[i])
-					i++;
-			}
+			if (line[i] == '\'' || line[i] == '\"')
+				i = handle_quotes_increment(line, i);
 			else
 				i++;
 		}
 		res[j] = ft_substr(line, start, i - start);
 		j++;
 	}
+	free(line);
 	return res;
 }
+
 void	tokens_list_processing(t_tokens *list)
 {
 	t_tokens	*templist;

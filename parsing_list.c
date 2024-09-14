@@ -74,7 +74,8 @@ t_node	*make_final_list(t_tokens *tokens)
 			}
 			else
 			{
-				printf("infile redir error");
+				free(newnode);
+				return (NULL);
 			}
 		}
 		else if(token->type == redir_out_append)
@@ -89,7 +90,8 @@ t_node	*make_final_list(t_tokens *tokens)
 			}
 			else
 			{
-				printf("outfile redir error");
+				free(newnode);
+				return (NULL);
 			}
 		}
 		else if(token->type == redir_out_overwrite)
@@ -104,7 +106,8 @@ t_node	*make_final_list(t_tokens *tokens)
 			}
 			else
 			{
-				printf("outfile redir error");
+				free(newnode);
+				return (NULL);
 			}
 		}
 		else if(token->type == heredoc)
@@ -118,7 +121,8 @@ t_node	*make_final_list(t_tokens *tokens)
 			}
 			else
 			{
-				printf("heredoc error");
+				free(newnode);
+				return (NULL);
 			}
 		}
 		else if(token->type == command)

@@ -30,6 +30,7 @@ echo $ $ $ $
 echo "$"
 echo "$ $ $ $"
 echo $?
+echo "exit_code ->$? user ->$USER home -> $HOME"
 ---------------------------
 echo -n test
 echo -nnn test
@@ -43,7 +44,7 @@ echo "-n-n" test
 echo -n
 echo -nnnn
 ---------------------------
-
+echo >| hello
 
 //-----------------------cd--------------------------//
 cd
@@ -124,15 +125,29 @@ export 1TEST=test (1)
 
 -------------Pipe---------------
 cat file | grep "smth valid"
+cat	file | grep "smth valid" | sort
 ls||
 |ls
 ls|
 
 -------------Infile---------------
-(valid file) < cat
+< (valid file) cat
 cat < (valid file)
 cat < (invalid file)
 cat <validfile1 <validfile2
+
+
+-------------outfile--------------
+cat infile > outfile
+> outfile cat infile
+cat infile > outfile1 > outfile2
+cat infile >>outfile1 >>outfile2
+>outfile1 cat infile >outfile2
+>outfile1 >outfile2 cat infile
+cat infile1 >>outfile + cat infile2 >>outfile
+
+-------------combined-----------------
+< infile cat | sort > outfile
 
 
 /////////////////////////////////////////////////////

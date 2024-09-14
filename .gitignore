@@ -6,3 +6,5 @@ testfile
 .DS_Store
 minishell
 infile
+minishell_tester
+notes.txt
