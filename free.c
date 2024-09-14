@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:15:18 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/14 03:41:51 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/14 21:41:33 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	free_t_tokens(t_tokens *obj)
 	{
 		temp_node = node;
 		node = node->next;
+		if (temp_node->type == command || temp_node->type == arguments)
+			free(temp_node->token);
 		free(temp_node);
 	}
 }
