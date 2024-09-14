@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:08:07 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 00:38:02 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/14 18:17:49 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,16 @@ void	print_2d_array(char **cmd)
 	}
 }
 
-int	exit_process(void)
+int	exit_process(char **arg)
 {
+	int	exit_code;
+
+	if (arg[1])
+		exit_code = ft_atoi(arg[1]);
+	else
+		exit_code = 0;
 	write(1, "exit\n", 5);
-	exit(0);
+	exit(exit_code);
 	return (0);
 }
 

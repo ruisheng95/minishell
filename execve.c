@@ -90,7 +90,7 @@ int buildins(char **cmd, t_data **data)
 	}
 	if(ft_strcmp(cmd[0], "exit") == 0)
 	{
-		return(exit_process());
+		return(exit_process(cmd));
 	}
 	return 0;
 }

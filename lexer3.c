@@ -90,6 +90,22 @@ void	tokens_list_processing(t_tokens *list)
 	}
 }
 
+void	remove_quotes_helper_cuz_norminette(char *line, char **res, int *i, int *j)
+{
+	if (line[(*i)++] == '\'')
+	{
+		while (line[(*i)] && line[(*i)] != '\'')
+			(*res)[(*j)++] = line[(*i)++];
+		(*i)++;
+	}
+	else if (line[(*i)++] == '\"')
+	{
+		while (line[(*i)] && line[(*i)] != '\"')
+			(*res)[(*j)++] = line[(*i)++];
+		(*i)++;
+	}
+}
+
 char	*remove_quotes(char *line)
 {
 	char	*res;

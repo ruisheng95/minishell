@@ -72,4 +72,7 @@ testlist:
 testcl:
 	gcc expansion.c lexer.c lexer2.c parsing_list.c command_list.c libft.a lexer3.c
 
+test: re
+	cd minishell_tester && ./tester
+
 .PHONY: all clean fclean re leak bonus

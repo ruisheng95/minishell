@@ -131,7 +131,7 @@ char	*get_substr(char *line, int i);
 //utils
 void	free_2d_array(char **str);
 void	print_2d_array(char **cmd);
-int		exit_process();
+int		exit_process(char **arg);
 int		set_terminos_echo(int enable);
 void	increment_shell_lvl(t_data *data);
 void	change_env_oldpwd(t_data *data);
