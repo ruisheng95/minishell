@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 10:26:15 by rng               #+#    #+#             */
-/*   Updated: 2024/09/16 00:14:22 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/16 01:20:47 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,17 +140,34 @@ void		free_2d_array(char **str);
 void		print_2d_array(char **cmd);
 int			exit_process(char **arg, t_data *data);
 int			set_terminos_echo(int enable);
+
+//utils2
 void		increment_shell_lvl(t_data *data);
 void		change_env_oldpwd(t_data *data);
 void		change_env_pwd(t_data *data);
+int			waitpid_and_get_exit_status(pid_t pid);
+
+//utils3
+int			change_exit_code(t_data *data);
+void		init_data_struct(t_data *data, char **envp);
+
+//free
 void		free_t_tokens(t_tokens *obj);
 void		free_t_node(t_node *obj);
 void		free_t_cmd_list(t_cmd_list *obj);
-int			waitpid_and_get_exit_status(pid_t pid);
+void		cleanup(t_data *data, t_tokens *list);
 
 //execve
 char		*get_path(char **envp, char *cmd);
 int			execute(char **cmd, t_data **data, t_cmd_list *templist);
+
+//execve2
+void		prepare_buildins_fd(t_cmd_list *templist);
+int			check_buildins_call(char *str);
+
+//execve3
+void		exit_error_str(char *str, int n);
+void		exit_error(int n);
 
 //lexer2
 int			handle_quotes(char *line, int i);
@@ -170,22 +187,23 @@ int			check_valid_list(t_tokens *list);
 t_tokens	*get_last_node(t_tokens *tokens);
 
 //parse_list
-t_node	*make_final_list(t_tokens *tokens);
-t_node	*make_final_list_heredoc(t_node *list);
-void	error_str(int n, char *str);
-void	init_pipe_node(t_node *node);
+t_node		*make_final_list(t_tokens *tokens);
+t_node		*make_final_list_heredoc(t_node *list);
+void		error_str(int n, char *str);
+void		init_pipe_node(t_node *node);
 
 //parse_list2
-int	handle_redir_input_token(t_node *newnode, t_tokens **token);
-int	handle_redir_out_append_token(t_node *newnode, t_tokens **token);
-int	handle_redir_out_overwrite_token(t_node *newnode, t_tokens **token);
-int	handle_heredoc_token(t_node *newnode, t_tokens **token);
-void	handle_command_token(t_node *newnode, t_tokens **token);
+int			handle_redir_input_token(t_node *newnode, t_tokens **token);
+int			handle_redir_out_append_token(t_node *newnode, t_tokens **token);
+int			handle_redir_out_overwrite_token(t_node *newnode, t_tokens **token);
+int			handle_heredoc_token(t_node *newnode, t_tokens **token);
+void		handle_command_token(t_node *newnode, t_tokens **token);
 
 //parse_list3
-t_node	*create_node(t_tokens *token);
-void	add_node_to_list(t_node **list, t_node **last_node, t_node *newnode);
-void	handle_pipe_token(t_node *newnode, t_tokens **token);
+t_node		*create_node(t_tokens *token);
+void		add_node_to_list(t_node **list, t_node **last_node,
+				t_node *newnode);
+void		handle_pipe_token(t_node *newnode, t_tokens **token);
 
 //pwd
 int			pwd(void);
@@ -220,8 +238,8 @@ int			check_str(char *str);
 int			print_sorted_env(char **tempenv);
 
 //cmdlist
-t_cmd_list *make_command_list(t_node *list);
-void	make_command_list_heredoc(t_cmd_list **head,
-	t_cmd_list **lastnode, t_cmd_list **newnode, char *limiter);
-char	**get_heredoc_cmd(char *lim);
+t_cmd_list	*make_command_list(t_node *list);
+void		make_command_list_heredoc(t_cmd_list **head,
+				t_cmd_list	**lastnode, t_cmd_list **newnode, char *limiter);
+char		**get_heredoc_cmd(char *lim);
 #endif

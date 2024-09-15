@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:43:18 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 00:28:06 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/16 01:43:42 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,6 @@
 
 void	prepare_fd(t_cmd_list *templist, t_data *data);
 void	here_doc_gnl(char *lim);
-
-void	exit_error(int n)
-{
-	if (n == 1)
-		write(2, "Error: wrong pipex usage\n", 25);
-	else
-		perror("Error");
-	exit(1);
-}
-
-void	exit_error_str(char *str, int n)
-{
-	int	len;
-
-	len = ft_strlen(str);
-	if (n == 1)
-		write(2, "Error: command not found: ", 26);
-	else
-		write(2, "Error: no such file or directory: ", 35);
-	write(2, str, len);
-	write(2, "\n", 1);
-	if (n == 1)
-		exit(127);
-	exit(1);
-}
 
 char	*get_path_helper_cuz_norm(char **envp, char *cmd)
 {
@@ -52,7 +27,7 @@ char	*get_path_helper_cuz_norm(char **envp, char *cmd)
 		write(2, "Error: ", 7);
 		write(2, cmd, ft_strlen(cmd));
 		write(2, ": No such file or directory\n", 29);
-		return (NULL);
+		exit(126);
 	}
 	return (ft_substr(envp[i], 5, ft_strlen(envp[i])));
 }
@@ -84,29 +59,6 @@ char	*get_path(char **envp, char *cmd)
 	return (NULL);
 }
 
-int	check_buildins_call(char *str)
-{
-	if (ft_strcmp(str, "echo") == 0
-		|| ft_strcmp(str, "pwd") == 0
-		|| ft_strcmp(str, "env") == 0
-		|| ft_strcmp(str, "unset") == 0
-		|| ft_strcmp(str, "export") == 0
-		|| ft_strcmp(str, "cd") == 0
-		|| ft_strcmp(str, "exit") == 0)
-		return (1);
-	return (0);
-}
-
-void	prepare_buildins_fd(t_cmd_list *templist)
-{
-	dup2(templist->in_fd, 0);
-	dup2(templist->out_fd, 1);
-	if (templist->in_fd != 0)
-		close(templist->in_fd);
-	if (templist->out_fd != 1)
-		close(templist->out_fd);
-}
-
 int	buildins(char **cmd, t_data **data, t_cmd_list *templist)
 {
 	int	n;
@@ -132,6 +84,16 @@ int	buildins(char **cmd, t_data **data, t_cmd_list *templist)
 	return (n);
 }
 
+char	*get_command_path(char *cmd, t_data *data)
+{
+	if (cmd[0] == '.' && cmd[1] == '/')
+		return (ft_strdup(cmd));
+	else if (cmd[0] == '/')
+		return (ft_strdup(cmd));
+	else
+		return (get_path(data->envp, cmd));
+}
+
 int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 {
 	char	*path;
@@ -139,9 +101,9 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 	int		exit_status;
 
 	if (cmd == NULL || cmd[0][0] == '\0')
-		return(0);
+		return (0);
 	if (check_buildins_call(cmd[0]) == 1)
-		return(buildins(cmd, data, templist));
+		return (buildins(cmd, data, templist));
 	pid = fork();
 	if (pid == 0)
 	{
@@ -151,13 +113,8 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 		set_terminos_echo(1);
 		if (ft_strcmp(cmd[0], HEREDOC_CMD) == 0)
 			return (here_doc_gnl(cmd[1]), exit(0), 0);
-		if (cmd[0][0] == '.' && cmd[0][1] == '/')
-			path = ft_strdup(cmd[0]);
-		else if(cmd[0][0] == '/')
-			path = ft_strdup(cmd[0]);
-		else
-			path = get_path((*data)->envp, cmd[0]);
-		if(execve(path, cmd, (*data)->envp) == -1)
+		path = get_command_path(cmd[0], *data);
+		if (execve(path, cmd, (*data)->envp) == -1)
 		{
 			perror("execve: ");
 			exit (126);
@@ -169,5 +126,5 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 		if (ft_strcmp(cmd[0], HEREDOC_CMD) == 0)
 			waitpid(templist->pid, &exit_status, 0);
 	}
-	return(0);
+	return (0);
 }

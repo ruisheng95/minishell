@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:28:52 by rng               #+#    #+#             */
-/*   Updated: 2024/09/15 20:48:00 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/16 00:36:39 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,27 @@ void	here_doc_gnl(char *lim)
 		free(str);
 		str = get_next_line(STDIN_FILENO);
 	}
+}
+
+int	check_buildins_call(char *str)
+{
+	if (ft_strcmp(str, "echo") == 0
+		|| ft_strcmp(str, "pwd") == 0
+		|| ft_strcmp(str, "env") == 0
+		|| ft_strcmp(str, "unset") == 0
+		|| ft_strcmp(str, "export") == 0
+		|| ft_strcmp(str, "cd") == 0
+		|| ft_strcmp(str, "exit") == 0)
+		return (1);
+	return (0);
+}
+
+void	prepare_buildins_fd(t_cmd_list *templist)
+{
+	dup2(templist->in_fd, 0);
+	dup2(templist->out_fd, 1);
+	if (templist->in_fd != 0)
+		close(templist->in_fd);
+	if (templist->out_fd != 1)
+		close(templist->out_fd);
 }

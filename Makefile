@@ -1,16 +1,16 @@
 SRCS = \
-main.c rl_redisplay_line.c lexer.c expansion.c \
-execve.c execve2.c cd.c echo.c env.c lexer2.c pwd.c parsing_list.c \
-export.c unset.c utils.c command_list.c lexer3.c utils2.c \
-free.c expansion2.c lexer4.c remove_quotes.c export2.c \
-exit.c command_list2.c parsing_list2.c parsing_list3.c
+main.c rl_redisplay_line.c \
+lexer.c lexer2.c lexer3.c lexer4.c \
+expansion.c expansion2.c \
+execve.c execve2.c execve3.c \
+cd.c echo.c env.c pwd.c export.c export2.c unset.c exit.c \
+parsing_list.c parsing_list2.c parsing_list3.c \
+utils.c utils2.c utils3.c \
+command_list.c command_list2.c \
+free.c remove_quotes.c 
 
-BONUS_SRCS = \
-pipex_bonus.c utils_bonus.c
 
 OBJ = $(SRCS:.c=.o)
-
-BONUS_OBJ = $(BONUS_SRCS:.c=.o)
 
 NAME = minishell
 

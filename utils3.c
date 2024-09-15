@@ -1,38 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 00:39:43 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 01:51:44 by ethanlim         ###   ########.fr       */
+/*   Created: 2024/09/16 01:18:55 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/16 01:27:08 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	cd(char **cmd, t_data *data)
+int	change_exit_code(t_data *data)
 {
-	char	*path;
+	data->exit_code = 1;
+	return (1);
+}
 
-	change_env_oldpwd(data);
-	if (cmd[1] == NULL || cmd[1][0] == '\0')
-	{
-		path = get_expand_string(ft_strdup("HOME"), data->envp);
-		if (!path)
-		{
-			printf("Error: cd: HOME not set\n");
-			return (1);
-		}
-	}
-	else
-		path = cmd[1];
-	if (chdir(path) == -1)
-	{
-		perror("cd");
-		return (1);
-	}
-	change_env_pwd(data);
-	return (0);
+void	init_data_struct(t_data *data, char **envp)
+{
+	data->envp = malloc(sizeof(char *) * (total_strings(envp) + 1));
+	malloc_dup_env(data->envp, envp);
+	increment_shell_lvl(data);
+	data->saved_in_fd = dup(0);
+	data->saved_out_fd = dup(1);
+	data->exit_code = 0;
 }

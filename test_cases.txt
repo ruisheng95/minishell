@@ -22,7 +22,6 @@ echo "'$USER'"
 echo 0123"$USER"0123
 echo '$USER'
 echo "'$invalid'"
-echo "'$invalid'"
 echo "0123$ $ $USER"
 echo $
 echo $$ //cant use getpid lol so cant do this

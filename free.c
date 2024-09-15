@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:15:18 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 22:05:16 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/16 01:31:45 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,11 @@ void	free_2d_array(char **str)
 		i++;
 	}
 	free(str);
+}
+
+void	cleanup(t_data *data, t_tokens *list)
+{
+	free_t_tokens(list);
+	free_2d_array(data->tokens);
+	free_t_node(data->instr_list);
 }

@@ -1,38 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   execve3.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/13 00:39:43 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 01:51:44 by ethanlim         ###   ########.fr       */
+/*   Created: 2024/09/16 00:37:25 by ethanlim          #+#    #+#             */
+/*   Updated: 2024/09/16 00:37:46 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	cd(char **cmd, t_data *data)
+void	exit_error(int n)
 {
-	char	*path;
-
-	change_env_oldpwd(data);
-	if (cmd[1] == NULL || cmd[1][0] == '\0')
-	{
-		path = get_expand_string(ft_strdup("HOME"), data->envp);
-		if (!path)
-		{
-			printf("Error: cd: HOME not set\n");
-			return (1);
-		}
-	}
+	if (n == 1)
+		write(2, "Error: wrong pipex usage\n", 25);
 	else
-		path = cmd[1];
-	if (chdir(path) == -1)
-	{
-		perror("cd");
-		return (1);
-	}
-	change_env_pwd(data);
-	return (0);
+		perror("Error");
+	exit(1);
+}
+
+void	exit_error_str(char *str, int n)
+{
+	int	len;
+
+	len = ft_strlen(str);
+	if (n == 1)
+		write(2, "Error: command not found: ", 26);
+	else
+		write(2, "Error: no such file or directory: ", 35);
+	write(2, str, len);
+	write(2, "\n", 1);
+	if (n == 1)
+		exit(127);
+	exit(1);
 }
