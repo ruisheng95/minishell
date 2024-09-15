@@ -3,7 +3,7 @@ main.c rl_redisplay_line.c lexer.c expansion.c \
 execve.c execve2.c cd.c echo.c env.c lexer2.c pwd.c parsing_list.c \
 export.c unset.c utils.c command_list.c lexer3.c utils2.c \
 free.c expansion2.c lexer4.c remove_quotes.c export2.c \
-exit.c
+exit.c command_list2.c parsing_list2.c parsing_list3.c
 
 BONUS_SRCS = \
 pipex_bonus.c utils_bonus.c
@@ -16,7 +16,7 @@ NAME = minishell
 
 CC = gcc
 
-CFLAGS =
+CFLAGS = -Wall -Werror -Wextra
 
 READ = -lreadline 
 

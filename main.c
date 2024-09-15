@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:37:04 by rng               #+#    #+#             */
-/*   Updated: 2024/09/15 22:07:06 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/16 00:14:40 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ void	signal_handler(int sig)
 // 	char	*temp2;
 // 	char	*res;
 // 	int		i;
+
 // 	i = 0;
-// 	temp1 = ft_strjoin(ft_strjoin("\033[34m", ft_strjoin(
-// 		get_expand_string("USER", env), "@Minishell$ ")), "\033[0m");
+// 	temp1 = ft_strjoin(ft_strjoin("\033[34m", ft_strjoin(get_expand_string("USER", env), "@Minishell$ ")), "\033[0m");
 // 	if (getcwd(temp_buffer,sizeof(temp_buffer)) == NULL)
 // 	{
 // 		perror("getcwd error");

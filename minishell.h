@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 10:26:15 by rng               #+#    #+#             */
-/*   Updated: 2024/09/15 22:08:56 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/16 00:14:22 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,22 @@ int			check_valid_list(t_tokens *list);
 t_tokens	*get_last_node(t_tokens *tokens);
 
 //parse_list
-t_node		*make_final_list(t_tokens *tokens);
-t_node		*make_final_list_heredoc(t_node *list);
+t_node	*make_final_list(t_tokens *tokens);
+t_node	*make_final_list_heredoc(t_node *list);
+void	error_str(int n, char *str);
+void	init_pipe_node(t_node *node);
+
+//parse_list2
+int	handle_redir_input_token(t_node *newnode, t_tokens **token);
+int	handle_redir_out_append_token(t_node *newnode, t_tokens **token);
+int	handle_redir_out_overwrite_token(t_node *newnode, t_tokens **token);
+int	handle_heredoc_token(t_node *newnode, t_tokens **token);
+void	handle_command_token(t_node *newnode, t_tokens **token);
+
+//parse_list3
+t_node	*create_node(t_tokens *token);
+void	add_node_to_list(t_node **list, t_node **last_node, t_node *newnode);
+void	handle_pipe_token(t_node *newnode, t_tokens **token);
 
 //pwd
 int			pwd(void);
@@ -206,6 +220,8 @@ int			check_str(char *str);
 int			print_sorted_env(char **tempenv);
 
 //cmdlist
-t_cmd_list	*make_command_list(t_node *list);
-
+t_cmd_list *make_command_list(t_node *list);
+void	make_command_list_heredoc(t_cmd_list **head,
+	t_cmd_list **lastnode, t_cmd_list **newnode, char *limiter);
+char	**get_heredoc_cmd(char *lim);
 #endif

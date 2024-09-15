@@ -134,6 +134,8 @@ cat	file | grep "smth valid" | sort
 ls||
 |ls
 ls|
+cat invalid | cat infile
+cat | cat | ls
 
 -------------Infile---------------
 < (valid file) cat
