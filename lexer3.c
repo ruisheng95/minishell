@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 19:00:53 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/14 19:05:07 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 09:25:56 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**semi_ft_split(char *line)
 
 	i = 0;
 	j = 0;
-	res = malloc(sizeof(char *) * count_lexer_array(line));
+	res = ft_calloc(sizeof(char *), count_lexer_array(line));
 	while (line[i])
 	{
 		while (line[i] && line[i] == ' ')
@@ -108,5 +108,18 @@ void	tokens_list_processing(t_tokens *list)
 			free(stringsarray);
 		}
 		templist = templist->next;
+	}
+}
+
+void	print_tokens_list(t_tokens *list)
+{
+	int	i;
+
+	i = 0;
+	while (list != NULL)
+	{
+		printf("token %d : %s, type : %d\n", i, list->token, list->type);
+		list = list->next;
+		i++;
 	}
 }

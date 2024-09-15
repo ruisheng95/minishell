@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:15:18 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 12:51:44 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 21:55:10 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	free_t_cmd_list(t_cmd_list *obj)
 	{
 		temp_node = node;
 		node = node->next;
-		if (ft_strcmp(temp_node->cmd[0], heredoc_cmd) == 0)
+		if (temp_node->cmd && ft_strcmp(temp_node->cmd[0], heredoc_cmd) == 0)
 		{
 			free(temp_node->cmd[0]);
 			free(temp_node->cmd);

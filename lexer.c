@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:56:22 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 15:02:14 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 21:55:09 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	identify_tokens_list_2_helper_cuz_norm(t_tokens *list)
 	else if (list->type == string && list->prev
 		&& list->prev->type == heredoc)
 		return (heredoc_lim);
-	else if (list->type == string)
+	else if (list->type == string && list->token)
 		return (arguments);
 	return (0);
 }
@@ -141,19 +141,6 @@ void	identify_tokens_list2(t_tokens *list)
 		list = list->next;
 	}
 }
-
-// void	print_tokens_list(t_tokens *list)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (list != NULL)
-// 	{
-// 		printf("token %d : %s, type : %d\n", i, list->token, list->type);
-// 		list = list->next;
-// 		i++;
-// 	}
-// }
 
 // void	print_token_array(char **str)
 // {
