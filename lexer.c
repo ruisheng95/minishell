@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:56:22 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 21:50:37 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 14:54:00 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,20 @@ t_tokens	*init_token_list(t_data *data)
 	list = NULL;
 	while (data->tokens[i])
 	{
-		newnode = malloc(sizeof(t_tokens));
-		if (!newnode)
-			return (NULL);
-		newnode->token = data->tokens[i];
-		newnode->next = NULL;
-		newnode->prev = last_node;
-		if (!list)
-			list = newnode;
-		else
-			last_node->next = newnode;
-		last_node = newnode;
+		if (ft_strcmp(data->tokens[i], "$EMPTY") != 0)
+		{
+			newnode = malloc(sizeof(t_tokens));
+			if (!newnode)
+				return (NULL);
+			newnode->token = data->tokens[i];
+			newnode->next = NULL;
+			newnode->prev = last_node;
+			if (!list)
+				list = newnode;
+			else
+				last_node->next = newnode;
+			last_node = newnode;
+		}
 		i++;
 	}
 	return (list);
@@ -175,7 +178,7 @@ void	identify_tokens_list2(t_tokens *list)
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_tokens *list;
-// 	char *str = "echo hello > outfile";
+// 	char *str = "$EMPTY echo hi";
 // 	t_data data;
 // 	data.envp = envp;
 // 	if((data.tokens = lexer(str, &data)) == NULL)

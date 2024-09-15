@@ -16,7 +16,7 @@ NAME = minishell
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS =
 
 READ = -lreadline 
 
@@ -65,7 +65,7 @@ re: fclean all
 bonus : fclean $(BONUS_NAME)
 
 testlex:
-	gcc expansion.c lexer.c lexer2.c lexer3.c libft.a expansion2.c
+	gcc expansion.c lexer.c lexer2.c lexer3.c libft.a expansion2.c lexer4.c remove_quotes.c
 
 testlist:
 	gcc expansion.c lexer.c lexer2.c parsing_list.c libft.a lexer3.c expansion2.c lexer4.c

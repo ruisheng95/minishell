@@ -31,6 +31,8 @@ echo "$"
 echo "$ $ $ $"
 echo $?
 echo "exit_code ->$? user ->$USER home -> $HOME"
+echo $EMPTY
+$EMPTY echo hi
 ---------------------------
 echo -n test
 echo -nnn test
@@ -168,6 +170,7 @@ export a=ec + export b="ho hi" + $a$b
 export TEST="echo hello" + $TEST
 ./minishell
 ./a.out
+$EMPTY
 
 /////////////////////////////////////////////
 //--------------failed, to fix-------------//

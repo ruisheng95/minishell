@@ -118,7 +118,8 @@ int	run(char *line, t_data *data)
 		data->exit_code = 1;
 		return (1);
 	}
-	list = init_token_list(data);
+	if ((list = init_token_list(data)) == NULL)
+		return (0);
 	identify_tokens_list(list);
 	expansion(list, data);
 	tokens_list_processing(list);

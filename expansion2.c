@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:47:30 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 14:00:54 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 14:45:42 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	copy_substr(char **res, char *substr, int i)
 		i++;
 		j++;
 	}
+	str[i] = '\0';
 	free(substr);
 	return (i);
 }
