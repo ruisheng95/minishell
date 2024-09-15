@@ -6,7 +6,7 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:56:22 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 21:55:09 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/15 22:05:23 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,49 +75,49 @@ void	identify_tokens_list(t_tokens *tokens)
 	while (tokens)
 	{
 		if (tokens->token[0] == '|')
-			tokens->type = Pipe;
+			tokens->type = PIPE;
 		else if (tokens->token[0] == '>')
 		{
 			if (tokens->token[1] == '>')
-				tokens->type = redir_out_append;
+				tokens->type = REDIR_OUT_APPEND;
 			else
-				tokens->type = redir_out_overwrite;
+				tokens->type = REDIR_OUT_OVERWRITE;
 		}
 		else if (tokens->token[0] == '<')
 		{
 			if (tokens->token[1] == '<')
-				tokens->type = heredoc;
+				tokens->type = HEREDOC;
 			else
-				tokens->type = redir_input;
+				tokens->type = REDIR_INPUT;
 		}
 		else
-			tokens->type = string;
+			tokens->type = STRING;
 		tokens = tokens->next;
 	}
 }
 
 int	identify_tokens_list_2_helper_cuz_norm(t_tokens *list)
 {
-	if (list->type == string && list->prev
-		&& (list->prev->type == Pipe || list->prev->type == infile
-			|| list->prev->type == outfile_append
-			|| list->prev->type == outfile_overwrite
-			|| list->prev->type == heredoc_lim))
-		return (command);
-	else if (list->type == string && list->prev
-		&& list->prev->type == redir_input)
-		return (infile);
-	else if (list->type == string && list->prev
-		&& list->prev->type == redir_out_overwrite)
-		return (outfile_overwrite);
-	else if (list->type == string && list->prev
-		&& list->prev->type == redir_out_append)
-		return (outfile_append);
-	else if (list->type == string && list->prev
-		&& list->prev->type == heredoc)
-		return (heredoc_lim);
-	else if (list->type == string && list->token)
-		return (arguments);
+	if (list->type == STRING && list->prev
+		&& (list->prev->type == PIPE || list->prev->type == INFILE
+			|| list->prev->type == OUTFILE_APPEND
+			|| list->prev->type == OUTFILE_OVERWRITE
+			|| list->prev->type == HEREDOC_LIM))
+		return (COMMAND);
+	else if (list->type == STRING && list->prev
+		&& list->prev->type == REDIR_INPUT)
+		return (INFILE);
+	else if (list->type == STRING && list->prev
+		&& list->prev->type == REDIR_OUT_OVERWRITE)
+		return (OUTFILE_OVERWRITE);
+	else if (list->type == STRING && list->prev
+		&& list->prev->type == REDIR_OUT_APPEND)
+		return (OUTFILE_APPEND);
+	else if (list->type == STRING && list->prev
+		&& list->prev->type == HEREDOC)
+		return (HEREDOC_LIM);
+	else if (list->type == STRING && list->token)
+		return (ARGUMENTS);
 	return (0);
 }
 
@@ -132,9 +132,9 @@ void	identify_tokens_list2(t_tokens *list)
 		return ;
 	while (list)
 	{
-		if (list == first_token && list->type == string)
-			list->type = command;
-		else if (list->type == string)
+		if (list == first_token && list->type == STRING)
+			list->type = COMMAND;
+		else if (list->type == STRING)
 		{
 			list->type = identify_tokens_list_2_helper_cuz_norm(list);
 		}

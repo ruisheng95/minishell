@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pwd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/15 10:24:18 by rng               #+#    #+#             */
+/*   Updated: 2024/09/15 10:25:18 by rng              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	pwd(void)
@@ -5,12 +17,12 @@ int	pwd(void)
 	char	*str;
 
 	str = getcwd(NULL, 0);
-	if(!str)
+	if (!str)
 	{
 		perror("getcwd error");
-		return 1;
+		return (1);
 	}
 	printf("%s\n", str);
 	free(str);
-	return 0;
+	return (0);
 }

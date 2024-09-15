@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 19:05:09 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/14 19:05:19 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 10:38:47 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	remove_quotes_from_token_list(t_tokens *list)
 	templist = list;
 	while (templist)
 	{
-		if (templist->type == string)
+		if (templist->type == STRING)
 		{
 			tempptr = templist->token;
 			templist->token = remove_quotes(templist->token);

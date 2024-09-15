@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_list.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/15 18:38:46 by rng               #+#    #+#             */
+/*   Updated: 2024/09/15 20:35:37 by rng              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	init_pipe_node(t_node *node)
 {
-	if(pipe(node->piping.pipe_fd) == -1)
+	if (pipe(node->piping.pipe_fd) == -1)
 	{
 		perror("pipe");
 		exit(1);
@@ -41,33 +53,38 @@ void	error_str(int n, char *str)
 
 t_node	*make_final_list(t_tokens *tokens)
 {
-	t_node *list = NULL;
-	t_node *newnode = NULL;
-	t_node *last_node = NULL;
-	t_tokens *token;
+	t_node		*list;
+	t_node		*newnode;
+	t_node		*last_node;
+	t_tokens	*token;
+	int			i;
 
+	list = NULL;
+	newnode = NULL;
+	last_node = NULL;
 	token = tokens;
-	int i = 0;
-	while(token)
+	i = 0;
+	while (token)
 	{
 		newnode = malloc(sizeof(t_node));
 		newnode->type = token->type;
-		if(token->type == Pipe)
+		if (token->type == PIPE)
 		{
 			init_pipe_node(newnode);
 			token = token->next;
 		}
-		else if(token->type == redir_input)
+		else if (token->type == REDIR_INPUT)
 		{
-			newnode->type = redir_input;
-			if(token->next->type == infile)
+			newnode->type = REDIR_INPUT;
+			if (token->next->type == INFILE)
 			{
 				newnode->redir_in.in_file = token->next->token;
-				newnode->redir_in.fd = open(newnode->redir_in.in_file, O_RDONLY);
-				if(newnode->redir_in.fd == -1)
+				newnode->redir_in.fd = open(newnode->redir_in.in_file,
+						O_RDONLY);
+				if (newnode->redir_in.fd == -1)
 				{
 					error_str(2, newnode->redir_in.in_file);
-					return NULL;
+					return (NULL);
 				}
 				token = token->next;
 				token = token->next;
@@ -78,13 +95,14 @@ t_node	*make_final_list(t_tokens *tokens)
 				return (NULL);
 			}
 		}
-		else if(token->type == redir_out_append)
+		else if (token->type == REDIR_OUT_APPEND)
 		{
-			newnode->type = redir_out_append;
-			if(token->next->type == outfile_append)
+			newnode->type = REDIR_OUT_APPEND;
+			if (token->next->type == OUTFILE_APPEND)
 			{
 				newnode->redir_out.outfile = token->next->token;
-				newnode->redir_out.fd = open(newnode->redir_out.outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
+				newnode->redir_out.fd = open(newnode->redir_out.outfile,
+						O_WRONLY | O_CREAT | O_APPEND, 0777);
 				token = token->next;
 				token = token->next;
 			}
@@ -94,13 +112,14 @@ t_node	*make_final_list(t_tokens *tokens)
 				return (NULL);
 			}
 		}
-		else if(token->type == redir_out_overwrite)
+		else if (token->type == REDIR_OUT_OVERWRITE)
 		{
-			newnode->type = redir_out_overwrite;
-			if(token->next->type == outfile_overwrite)
+			newnode->type = REDIR_OUT_OVERWRITE;
+			if (token->next->type == OUTFILE_OVERWRITE)
 			{
 				newnode->redir_out.outfile = token->next->token;
-				newnode->redir_out.fd = open(newnode->redir_out.outfile, O_WRONLY | O_TRUNC| O_CREAT, 0777);
+				newnode->redir_out.fd = open(newnode->redir_out.outfile,
+						O_WRONLY | O_TRUNC | O_CREAT, 0777);
 				token = token->next;
 				token = token->next;
 			}
@@ -110,10 +129,10 @@ t_node	*make_final_list(t_tokens *tokens)
 				return (NULL);
 			}
 		}
-		else if(token->type == heredoc)
+		else if (token->type == HEREDOC)
 		{
-			newnode->type = heredoc;
-			if(token->next->type == heredoc_lim)
+			newnode->type = HEREDOC;
+			if (token->next->type == HEREDOC_LIM)
 			{
 				newnode->heredoc_obj.limiter = token->next->token;
 				token = token->next;
@@ -125,24 +144,24 @@ t_node	*make_final_list(t_tokens *tokens)
 				return (NULL);
 			}
 		}
-		else if(token->type == command)
+		else if (token->type == COMMAND)
 		{
-			newnode->type = s_command;
-			if(token->token != NULL && token->token[0] != '\0')
+			newnode->type = S_COMMAND;
+			if (token->token != NULL && token->token[0] != '\0')
 			{
 				newnode->simple_cmd.cmd = ft_strdup(token->token);
 				newnode->simple_cmd.array = ft_calloc(sizeof(char *), 1000);
 				newnode->simple_cmd.array[i] = ft_strdup(token->token);
 				i++;
 				token = token->next;
-				while(token != NULL && token->type == arguments)
+				while (token != NULL && token->type == ARGUMENTS)
 				{
 					newnode->simple_cmd.array[i] = ft_strdup(token->token);
 					i++;
 					token = token->next;
 				}
-			newnode->simple_cmd.array[i] = NULL;
-			i = 0;
+				newnode->simple_cmd.array[i] = NULL;
+				i = 0;
 			}
 			else
 			{
@@ -152,11 +171,10 @@ t_node	*make_final_list(t_tokens *tokens)
 				newnode->simple_cmd.array[1] = NULL;
 				token = token->next;
 			}
-
 		}
 		else
 			token = token->next;
-		if(last_node)
+		if (last_node)
 		{
 			last_node->next = newnode;
 			newnode->prev = last_node;
@@ -168,24 +186,23 @@ t_node	*make_final_list(t_tokens *tokens)
 		if (!list)
 			list = newnode;
 	}
-	return list;
+	return (list);
 }
 
 t_node	*make_final_list_heredoc(t_node *list)
 {
 	t_node	*head_node;
-	// t_node	*heredoc_node;
-	t_node 	*newnode;
+	t_node	*newnode;
 
 	head_node = list;
 	while (list)
 	{
-		if (list->type == heredoc)
+		if (list->type == HEREDOC)
 		{
 			if (!list->prev && !list->next)
 			{
 				newnode = malloc(sizeof(t_node));
-				newnode->type = s_command;
+				newnode->type = S_COMMAND;
 				newnode->simple_cmd.cmd = ft_strdup("true");
 				newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
 				newnode->simple_cmd.array[0] = ft_strdup("true");
@@ -194,10 +211,10 @@ t_node	*make_final_list_heredoc(t_node *list)
 				newnode->prev = list;
 				newnode->next = 0;
 			}
-			else if (!list->prev && list->next && list->next->type != s_command)
+			else if (!list->prev && list->next && list->next->type != S_COMMAND)
 			{
 				newnode = malloc(sizeof(t_node));
-				newnode->type = s_command;
+				newnode->type = S_COMMAND;
 				newnode->simple_cmd.cmd = ft_strdup("true");
 				newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
 				newnode->simple_cmd.array[0] = ft_strdup("true");
@@ -215,35 +232,39 @@ t_node	*make_final_list_heredoc(t_node *list)
 
 void	print_final_list(t_node *list)
 {
-	while(list)
+	int	i;
+
+	while (list)
 	{
 		printf("|%d|", list->type);
-		if(list->type == redir_input)
+		if (list->type == REDIR_INPUT)
 		{
-			printf("|infile: %s, fd : %d|", list->redir_in.in_file, list->redir_in.fd);
+			printf("|infile: %s, fd : %d|", list->redir_in.in_file,
+				list->redir_in.fd);
 		}
-		if(list->type == s_command)
+		if (list->type == S_COMMAND)
 		{
 			printf("|%s|", list->simple_cmd.cmd);
-			int i = 0;
+			i = 0;
 			printf("|");
-			while(list->simple_cmd.array[i])
+			while (list->simple_cmd.array[i])
 			{
 				printf(":%s:", list->simple_cmd.array[i]);
 				i++;
 			}
-			// i = 0;
 			printf("|");
 		}
-		if(list->type == redir_out_append || list->type == redir_out_overwrite)
+		if (list->type == REDIR_OUT_APPEND || list->type == REDIR_OUT_OVERWRITE)
 		{
-			printf("|outfile: %s, fd : %d|", list->redir_out.outfile, list->redir_out.fd);
+			printf("|outfile: %s, fd : %d|", list->redir_out.outfile,
+				list->redir_out.fd);
 		}
-		if (list->type == Pipe)
+		if (list->type == PIPE)
 		{
-			printf("pipe fd[0] = %d, fd[1] = %d", list->piping.pipe_fd[0], list->piping.pipe_fd[1]);
+			printf("pipe fd[0] = %d, fd[1] = %d", list->piping.pipe_fd[0],
+				list->piping.pipe_fd[1]);
 		}
-		if (list->type == heredoc)
+		if (list->type == HEREDOC)
 		{
 			printf("heredoc lim: %s", list->heredoc_obj.limiter);
 		}

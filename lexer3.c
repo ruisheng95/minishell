@@ -6,7 +6,7 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/14 19:00:53 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 09:25:56 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/15 10:38:43 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	insert_split_tokens(t_tokens *node, char **stringsarray)
 	while (stringsarray[i])
 	{
 		newnode = malloc(sizeof(t_tokens));
-		newnode->type = string;
+		newnode->type = STRING;
 		newnode->token = stringsarray[i];
 		newnode->prev = lastnode;
 		lastnode->next = newnode;
@@ -94,7 +94,7 @@ void	tokens_list_processing(t_tokens *list)
 	templist = list;
 	while (templist)
 	{
-		if (templist->type == string)
+		if (templist->type == STRING)
 		{
 			stringsarray = semi_ft_split(templist->token);
 			templist->token = stringsarray[0];

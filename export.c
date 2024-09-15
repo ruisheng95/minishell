@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:18:56 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 02:26:05 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 22:15:31 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ int	export(char ***env, char **str)
 		return (print_sorted_env(tempenv));
 	while (str[++i])
 	{
-		if ((error = export_valid_check(str[i])) != 0)
+		error = export_valid_check(str[i]);
+		if (error != 0)
 		{
 			free_2d_array(*env);
 			*env = tempenv;

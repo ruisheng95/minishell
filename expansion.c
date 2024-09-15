@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:51:35 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 14:16:09 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 22:05:12 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	expansion(t_tokens *list, t_data *data)
 	templist = list;
 	while (templist)
 	{
-		if (templist->type == string)
+		if (templist->type == STRING)
 			templist->token = expand_string(templist->token, data);
 		templist = templist->next;
 	}

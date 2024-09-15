@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/15 20:37:04 by rng               #+#    #+#             */
+/*   Updated: 2024/09/15 22:07:06 by rng              ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	print_cmd_list(t_cmd_list *list);
+void	close_non_std_fd(int ignore_fd_1, int ignore_fd_2);
 
 void	signal_handler(int sig)
 {
@@ -11,32 +24,32 @@ void	signal_handler(int sig)
 	rl_redisplay();
 }
 
-char	*get_readline_prompt(char **env)
-{
-	char	*temp1;
-	char	**temp_split;
-	char	temp_buffer[1024];
-	char	*temp2;
-	char	*res;
-	int		i;
-
-	i = 0;
-	temp1 = ft_strjoin(ft_strjoin("\033[34m", ft_strjoin(get_expand_string("USER", env), "@Minishell$ ")), "\033[0m");
-	if (getcwd(temp_buffer,sizeof(temp_buffer)) == NULL)
-	{
-		perror("getcwd error");
-		exit(1);
-	}
-	temp_split = ft_split(temp_buffer, '/');
-	while(temp_split[i + 1] != NULL)
-		i++;
-	temp2 = ft_strjoin(temp1, temp_split[i]);
-	res = ft_strjoin(temp2, ":");
-	free(temp1);
-	free(temp2);
-	free_2d_array(temp_split);
-	return res;
-}
+// char	*get_readline_prompt(char **env)
+// {
+// 	char	*temp1;
+// 	char	**temp_split;
+// 	char	temp_buffer[1024];
+// 	char	*temp2;
+// 	char	*res;
+// 	int		i;
+// 	i = 0;
+// 	temp1 = ft_strjoin(ft_strjoin("\033[34m", ft_strjoin(
+// 		get_expand_string("USER", env), "@Minishell$ ")), "\033[0m");
+// 	if (getcwd(temp_buffer,sizeof(temp_buffer)) == NULL)
+// 	{
+// 		perror("getcwd error");
+// 		exit(1);
+// 	}
+// 	temp_split = ft_split(temp_buffer, '/');
+// 	while(temp_split[i + 1] != NULL)
+// 		i++;
+// 	temp2 = ft_strjoin(temp1, temp_split[i]);
+// 	res = ft_strjoin(temp2, ":");
+// 	free(temp1);
+// 	free(temp2);
+// 	free_2d_array(temp_split);
+// 	return res;
+// }
 
 // t_tokens*	process_tokens(t_data *data)
 // {
@@ -65,38 +78,38 @@ char	*get_readline_prompt(char **env)
 // 	return list;
 // }
 
-int the_real_actual_main(t_data *data)
+int	the_real_actual_main(t_data *data)
 {
-	int exit_status = 0;
-	int	n;
+	int			exit_status;
+	t_cmd_list	*cmdlist;
+	t_cmd_list	*templist;
+	int			n;
 
-	t_cmd_list *cmdlist = make_command_list(data->instr_list);
-	t_cmd_list *templist = cmdlist;
+	exit_status = 0;
+	cmdlist = make_command_list(data->instr_list);
+	templist = cmdlist;
 	// print_cmd_list(templist);
-	while(templist && templist->cmd)
+	while (templist && templist->cmd)
 	{
-		if((n = execute(templist->cmd, &data, templist)) != 0 )
-			return n;
+		n = execute(templist->cmd, &data, templist);
+		if (n != 0)
+			return (n);
 		templist = templist->next;
 	}
 	templist = cmdlist;
-	for (int i = 3; i < 1000; i++)
-	{
-		if(i != data->saved_in_fd && i != data->saved_out_fd)
-			close(i);
-	}
+	close_non_std_fd(data->saved_in_fd, data->saved_out_fd);
 	while (templist)
 	{
 		exit_status = waitpid_and_get_exit_status(templist->pid);
 		if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGQUIT)
 		{
 			ft_printf("Quit\n");
-			break;
+			break ;
 		}
 		else if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGINT)
 		{
 			ft_printf("\n");
-			break;
+			break ;
 		}
 		templist = templist->next;
 	}
@@ -107,7 +120,7 @@ int the_real_actual_main(t_data *data)
 int	run(char *line, t_data *data)
 {
 	t_tokens	*list;
-	int		error = 0;
+	int			error;
 
 	data->input_line = line;
 	data->tokens = lexer(line, data);
@@ -127,21 +140,20 @@ int	run(char *line, t_data *data)
 	identify_tokens_list2(list);
 	// print_tokens_list(list);
 	error = check_valid_list(list);
-	if(error == 1)
+	if (error == 1)
 	{
 		data->exit_code = 1;
-		return 1;
+		return (1);
 	}
-	// printf("----------------------");
-	if((data->instr_list = make_final_list(list)) == NULL)
+	data->instr_list = make_final_list(list);
+	if (data->instr_list == NULL)
 	{
 		data->exit_code = 1;
-		return 1;
+		return (1);
 	}
 	data->instr_list = make_final_list_heredoc(data->instr_list);
-	// execute(data.tokens, data.envp);
 	// print_final_list(data->instr_list);
-	if(data->instr_list != NULL)
+	if (data->instr_list != NULL)
 	{
 		data->exit_code = the_real_actual_main(data);
 	}
@@ -149,7 +161,7 @@ int	run(char *line, t_data *data)
 	free_t_tokens(list);
 	free_2d_array(data->tokens);
 	free_t_node(data->instr_list);
-	return 0;
+	return (0);
 }
 
 void	init_data_struct(t_data *data, char **envp)
@@ -162,25 +174,23 @@ void	init_data_struct(t_data *data, char **envp)
 	data->exit_code = 0;
 }
 
-int main(int argc, char **argv, char **envp) 
+int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
 	char	*line;
-	// char	*readline_prompt;
 
 	(void)(argc);
 	(void)(argv);
 	init_data_struct(&data, envp);
 	signal(SIGQUIT, SIG_IGN);
-    while (1)
+	while (1)
 	{
 		signal(SIGINT, signal_handler);
-		// readline_prompt = get_readline_prompt(envp);
 		set_terminos_echo(0);
-    	line = readline("Minishell$");
+		line = readline("Minishell$");
 		if (line == NULL)
 		{
-			write(1,"exit\n",5);
+			write(1, "exit\n", 5);
 			break ;
 		}
 		if (line && line[0])
@@ -189,8 +199,8 @@ int main(int argc, char **argv, char **envp)
 			run(line, &data);
 		}
 		free(line);
-    }
+	}
 	set_terminos_echo(1);
 	free_2d_array(data.envp);
-    return 0;
+	return (0);
 }
