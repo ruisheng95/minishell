@@ -68,14 +68,15 @@ char	*get_readline_prompt(char **env)
 int the_real_actual_main(t_data *data)
 {
 	int exit_status = 0;
+	int	n;
 
 	t_cmd_list *cmdlist = make_command_list(data->instr_list);
 	t_cmd_list *templist = cmdlist;
 	// print_cmd_list(templist);
 	while(templist && templist->cmd)
 	{
-		if(execute(templist->cmd, &data, templist) != 0 )
-			return 1;
+		if((n = execute(templist->cmd, &data, templist)) != 0 )
+			return n;
 		templist = templist->next;
 	}
 	templist = cmdlist;

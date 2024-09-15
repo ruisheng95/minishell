@@ -6,12 +6,11 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 02:11:44 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 02:17:23 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 02:24:51 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 int	check_alpha(char *str)
 {
@@ -31,7 +30,7 @@ int	exit_process(char **arg, t_data *data)
 {
 	int	exit_code;
 
-	if(arg[2] != NULL)
+	if (arg[2] != NULL)
 	{
 		printf("Error: exit: too many arguments\n");
 		return (1);

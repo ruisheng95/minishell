@@ -153,7 +153,7 @@ cat infile1 >>outfile + cat infile2 >>outfile
 < infile cat | sort > outfile
 cat < infile | ls
 echo hi | echo bye > outfile
-
+echi hi | cat < infile
 
 /////////////////////////////////////////////////////
 //-----------------random cases--------------------//

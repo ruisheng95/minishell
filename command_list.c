@@ -37,6 +37,41 @@ void	make_command_list_heredoc(t_cmd_list **head, t_cmd_list **lastnode, t_cmd_l
 	*lastnode = heredoc_node;
 }
 
+t_cmd_list *create_new_node(void) 
+{
+	t_cmd_list *newnode;
+	
+	newnode = malloc(sizeof(t_cmd_list));
+	newnode->cmd = 0;
+	newnode->pid = 0;
+	newnode->in_fd = 0;
+	newnode->out_fd = 1;
+	newnode->next = NULL;
+	newnode->prev = NULL;
+	return (newnode);
+}
+
+void set_prev_fd(t_cmd_list *newnode, t_node *templist, t_cmd_list **head, t_cmd_list **lastnode)
+{
+    if (templist->prev)
+	{
+        if (templist->prev->type == redir_input)
+		{
+            newnode->in_fd = templist->prev->redir_in.fd;
+        }
+		else if (templist->prev->type == Pipe)
+		{
+            newnode->in_fd = templist->prev->piping.pipe_fd[0];
+        }
+		else if (templist->prev->type == redir_out_append || templist->prev->type == redir_out_overwrite)
+		{
+            newnode->out_fd = templist->prev->redir_out.fd;
+        }
+		else if (templist->prev && templist->prev->type == heredoc)
+			make_command_list_heredoc(head, lastnode, &newnode, templist->prev->heredoc_obj.limiter);
+    }
+}
+
 t_cmd_list *make_command_list(t_node *list)
 {
 	t_cmd_list *newnode;
@@ -45,24 +80,29 @@ t_cmd_list *make_command_list(t_node *list)
 	t_node *templist = list;
 	while(templist)
 	{
-		newnode = malloc(sizeof(t_cmd_list));
-		newnode->cmd = 0;
-		newnode->pid = 0;
+		newnode = create_new_node();
 		while(templist && templist->type != s_command)
 			templist = templist->next;
 		if(templist)
 		{
 			newnode->cmd = templist->simple_cmd.array;
-			newnode->in_fd = 0;
-			newnode->out_fd = 1;
-			if(templist->prev && templist->prev->type == redir_input)
-				newnode->in_fd = templist->prev->redir_in.fd;
-			if(templist->prev && templist->prev->type == Pipe)
-				newnode->in_fd = templist->prev->piping.pipe_fd[0];
-			if(templist->prev && (templist->prev->type == redir_out_append || templist->prev->type == redir_out_overwrite))
-				newnode->out_fd = templist->prev->redir_out.fd;
-			if(templist->prev && templist->prev->type == heredoc)
-				make_command_list_heredoc(&head, &lastnode, &newnode, templist->prev->heredoc_obj.limiter);
+			// newnode->in_fd = 0;
+			// newnode->out_fd = 1;
+			// if(templist->prev && templist->prev->type == redir_input)
+			// 	newnode->in_fd = templist->prev->redir_in.fd;
+			// if(templist->prev && templist->prev->type == Pipe)
+			// 	newnode->in_fd = templist->prev->piping.pipe_fd[0];
+			// if(templist->prev && (templist->prev->type == redir_out_append || templist->prev->type == redir_out_overwrite))
+			// 	newnode->out_fd = templist->prev->redir_out.fd;
+			// if (templist->prev
+			// && (templist->prev->type == redir_input
+			// || templist->prev->type == redir_out_append
+			// || templist->prev->type == redir_out_overwrite
+			// || templist->prev->type == Pipe
+			// || templist->prev->type == heredoc))
+			set_prev_fd(newnode, templist, &head, &lastnode);
+			// if(templist->prev && templist->prev->type == heredoc)
+			// 	make_command_list_heredoc(&head, &lastnode, &newnode, templist->prev->heredoc_obj.limiter);
 			while(templist->next && 
 				(templist->next->type == Pipe || 
 				templist->next-> type == redir_out_append ||
@@ -119,7 +159,7 @@ void	print_cmd_list(t_cmd_list *list)
 // 	t_tokens *list;
 // 	t_node	*final_list;
 // 	t_cmd_list *cmdlist;
-// 	char *str = "env | grep \"USER\"";
+// 	char *str = "echo hi > outfile1 | echo bye > outfile2";
 // 	t_data data;
 // 	data.envp = envp;
 // 	if((data.tokens = lexer(str, &data)) == NULL)

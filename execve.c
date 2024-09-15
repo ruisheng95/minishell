@@ -20,6 +20,8 @@ void	exit_error_str(char *str, int n)
 		write(2, "Error: no such file or directory: ", 35);
 	write(2, str, len);
 	write(2, "\n", 1);
+	if (n == 1)
+		exit(127);
 	exit(1);
 }
 
@@ -133,8 +135,8 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 	int		exit_status;
 	int		n;
 
-	if (cmd == NULL)
-		exit_error(0);
+	if (cmd == NULL || cmd[0][0] == '\0')
+		return(0);
 	// prepare_fd(templist, *data);
 	if (ft_strcmp(cmd[0], "echo") == 0 ||
 		ft_strcmp(cmd[0], "pwd") == 0 ||
@@ -172,12 +174,12 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 			path = ft_strdup(cmd[0]);
 		else
 			path = get_path((*data)->envp, cmd[0]);
-		if(!path)
-			exit(1);
+		// if(!path)
+		// 	exit(127);
 		if(execve(path, cmd, (*data)->envp) == -1)
 		{
-			perror("execve failed");
-			exit (-1);
+			perror("execve: ");
+			exit (127);
 		}
 	}
 	else

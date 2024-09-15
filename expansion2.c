@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 16:47:30 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/14 21:50:08 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 14:00:54 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ char	*get_expand_string(char *str, char **envp)
 	int		i;
 
 	i = 0;
+	if (ft_strcmp(str, "EMPTY") == 0)
+	{
+		temp = ft_strdup("");
+		return (temp);
+	}
 	temp2 = ft_strjoin(str, "=");
 	while (envp[i] != NULL && ft_strncmp(envp[i], temp2, ft_strlen(temp2)) != 0)
 		i++;

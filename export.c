@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:18:56 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/14 22:00:10 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 02:26:05 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ int	export(char ***env, char **str)
 
 	i = 0;
 	tempenv = malloc(sizeof(char *) * (total_strings(*env) + 2));
-	if (!tempenv)
-		return (1);
 	malloc_dup_env(tempenv, *env);
 	if (!str[1])
 		return (print_sorted_env(tempenv));

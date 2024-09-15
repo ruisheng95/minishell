@@ -6,11 +6,23 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:51:35 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/14 21:50:16 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 14:16:09 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	expand_string_helper_cuz_norminette_3(char **res, int *i, int exit_code)
+{
+	int		k;
+	char	*temp;
+
+	k = -1;
+	temp = ft_itoa(exit_code);
+	while (temp[++k])
+		(*res)[(*i)++] = temp[k];
+	free(temp);
+}
 
 int	expand_string_helper_cuz_norminette(char **res, char *line,
 	int *i, t_data *data)
@@ -24,7 +36,7 @@ int	expand_string_helper_cuz_norminette(char **res, char *line,
 		(*res)[(*i)++] = '$';
 	else if (line[j + 1] == '?')
 	{
-		(*res)[(*i)++] = data->exit_code + '0';
+		expand_string_helper_cuz_norminette_3(res, i, data->exit_code);
 		j++;
 	}
 	else

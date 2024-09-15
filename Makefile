@@ -68,10 +68,10 @@ testlex:
 	gcc expansion.c lexer.c lexer2.c lexer3.c libft.a expansion2.c
 
 testlist:
-	gcc expansion.c lexer.c lexer2.c parsing_list.c libft.a lexer3.c
+	gcc expansion.c lexer.c lexer2.c parsing_list.c libft.a lexer3.c expansion2.c lexer4.c
 
 testcl:
-	gcc expansion.c lexer.c lexer2.c parsing_list.c command_list.c libft.a lexer3.c
+	gcc expansion.c lexer.c lexer2.c parsing_list.c command_list.c libft.a lexer3.c expansion2.c lexer4.c remove_quotes.c
 
 test: re
 	cd minishell_tester && ./tester
