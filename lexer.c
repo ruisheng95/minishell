@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:56:22 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 14:54:00 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/15 15:02:14 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,13 @@ t_tokens	*init_token_list(t_data *data)
 
 	if (!data || !data->tokens)
 		return (NULL);
-	i = 0;
+	i = -1;
 	list = NULL;
-	while (data->tokens[i])
+	while (data->tokens[++i])
 	{
 		if (ft_strcmp(data->tokens[i], "$EMPTY") != 0)
 		{
 			newnode = malloc(sizeof(t_tokens));
-			if (!newnode)
-				return (NULL);
 			newnode->token = data->tokens[i];
 			newnode->next = NULL;
 			newnode->prev = last_node;
@@ -68,7 +66,6 @@ t_tokens	*init_token_list(t_data *data)
 				last_node->next = newnode;
 			last_node = newnode;
 		}
-		i++;
 	}
 	return (list);
 }
