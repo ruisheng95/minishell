@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_list3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:32:39 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 23:44:12 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:09:04 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,20 @@ void	add_node_to_list(t_node **list, t_node **last_node, t_node *newnode)
 	{
 		*list = newnode;
 	}
+}
+
+t_node	*create_node_heredoc(void)
+{
+	t_node	*newnode;
+
+	newnode = malloc(sizeof(t_node));
+	if (newnode)
+	{
+		newnode->type = S_COMMAND;
+		newnode->simple_cmd.cmd = ft_strdup("true");
+		newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
+		newnode->simple_cmd.array[0] = ft_strdup("true");
+		newnode->simple_cmd.array[1] = 0;
+	}
+	return (newnode);
 }

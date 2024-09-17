@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:37:04 by rng               #+#    #+#             */
-/*   Updated: 2024/09/16 01:49:51 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:24:25 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	print_cmd_list(t_cmd_list *list);
 void	close_non_std_fd(int ignore_fd_1, int ignore_fd_2);
+void	waitpid_and_check_exit_status(int *exit_status, t_cmd_list	*templist);
+int		do_minishell_because_norm(t_data *data);
 
 void	signal_handler(int sig)
 {
@@ -43,21 +45,7 @@ int	the_real_actual_main(t_data *data)
 	}
 	templist = cmdlist;
 	close_non_std_fd(data->saved_in_fd, data->saved_out_fd);
-	while (templist)
-	{
-		exit_status = waitpid_and_get_exit_status(templist->pid);
-		if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGQUIT)
-		{
-			ft_printf("Quit\n");
-			break ;
-		}
-		else if (WIFSIGNALED(exit_status) && WTERMSIG(exit_status) == SIGINT)
-		{
-			ft_printf("\n");
-			break ;
-		}
-		templist = templist->next;
-	}
+	waitpid_and_check_exit_status(&exit_status, templist);
 	free_t_cmd_list(cmdlist);
 	return (exit_status);
 }
@@ -104,7 +92,6 @@ int	run(char *line, t_data *data)
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
-	char	*line;
 
 	(void)(argc);
 	(void)(argv);
@@ -114,18 +101,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal(SIGINT, signal_handler);
 		set_terminos_echo(0);
-		line = readline("Minishell$");
-		if (line == NULL)
-		{
-			write(1, "exit\n", 5);
+		if (do_minishell_because_norm(&data))
 			break ;
-		}
-		if (line && line[0])
-		{
-			add_history(line);
-			run(line, &data);
-		}
-		free(line);
 	}
 	set_terminos_echo(1);
 	free_2d_array(data.envp);

@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:43:18 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 01:43:42 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/17 22:57:18 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	prepare_fd(t_cmd_list *templist, t_data *data);
 void	here_doc_gnl(char *lim);
+void	prepare_fd_and_signal(t_cmd_list *templist, t_data *data);
+void	execve_error(void);
 
 char	*get_path_helper_cuz_norm(char **envp, char *cmd)
 {
@@ -107,18 +108,12 @@ int	execute(char **cmd, t_data **data, t_cmd_list *templist)
 	pid = fork();
 	if (pid == 0)
 	{
-		prepare_fd(templist, *data);
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
-		set_terminos_echo(1);
+		prepare_fd_and_signal(templist, *data);
 		if (ft_strcmp(cmd[0], HEREDOC_CMD) == 0)
 			return (here_doc_gnl(cmd[1]), exit(0), 0);
 		path = get_command_path(cmd[0], *data);
 		if (execve(path, cmd, (*data)->envp) == -1)
-		{
-			perror("execve: ");
-			exit (126);
-		}
+			execve_error();
 	}
 	else
 	{

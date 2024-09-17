@@ -4,7 +4,7 @@ lexer.c lexer2.c lexer3.c lexer4.c \
 expansion.c expansion2.c \
 execve.c execve2.c execve3.c \
 cd.c echo.c env.c pwd.c export.c export2.c unset.c exit.c \
-parsing_list.c parsing_list2.c parsing_list3.c \
+parsing_list.c parsing_list2.c parsing_list3.c parsing_list4.c \
 utils.c utils2.c utils3.c \
 command_list.c command_list2.c \
 free.c remove_quotes.c 

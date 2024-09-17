@@ -3,14 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:20:59 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 00:13:55 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:11:40 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	standalone_heredoc(t_node *list);
+void	non_standalone_heredoc(t_node *list);
 
 void	init_pipe_node(t_node *node)
 {
@@ -78,7 +81,6 @@ t_node	*make_final_list(t_tokens *tokens)
 t_node	*make_final_list_heredoc(t_node *list)
 {
 	t_node	*head_node;
-	t_node	*newnode;
 
 	head_node = list;
 	while (list)
@@ -86,30 +88,9 @@ t_node	*make_final_list_heredoc(t_node *list)
 		if (list->type == HEREDOC)
 		{
 			if (!list->prev && !list->next)
-			{
-				newnode = malloc(sizeof(t_node));
-				newnode->type = S_COMMAND;
-				newnode->simple_cmd.cmd = ft_strdup("true");
-				newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
-				newnode->simple_cmd.array[0] = ft_strdup("true");
-				newnode->simple_cmd.array[1] = 0;
-				list->next = newnode;
-				newnode->prev = list;
-				newnode->next = 0;
-			}
+				standalone_heredoc(list);
 			else if (!list->prev && list->next && list->next->type != S_COMMAND)
-			{
-				newnode = malloc(sizeof(t_node));
-				newnode->type = S_COMMAND;
-				newnode->simple_cmd.cmd = ft_strdup("true");
-				newnode->simple_cmd.array = malloc(sizeof(char *) * 2);
-				newnode->simple_cmd.array[0] = ft_strdup("true");
-				newnode->simple_cmd.array[1] = 0;
-				list->next->prev = newnode;
-				newnode->next = list->next;
-				newnode->prev = list;
-				list->next = newnode;
-			}
+				non_standalone_heredoc(list);
 		}
 		list = list->next;
 	}
@@ -123,7 +104,8 @@ t_node	*make_final_list_heredoc(t_node *list)
 // 		printf("|%d|", list->type);
 // 		if(list->type == redir_input)
 // 		{
-// 			printf("|infile: %s, fd : %d|", list->redir_in.in_file, list->redir_in.fd);
+// 			printf("|infile: %s, fd : %d|", list->redir_in.in_file, 
+//				list->redir_in.fd);
 // 		}
 // 		if(list->type == s_command)
 // 		{
@@ -140,11 +122,13 @@ t_node	*make_final_list_heredoc(t_node *list)
 // 		}
 // 		if(list->type == redir_out_append || list->type == redir_out_overwrite)
 // 		{
-// 			printf("|outfile: %s, fd : %d|", list->redir_out.outfile, list->redir_out.fd);
+// 			printf("|outfile: %s, fd : %d|", list->redir_out.outfile,
+//				list->redir_out.fd);
 // 		}
 // 		if (list->type == Pipe)
 // 		{
-// 			printf("pipe fd[0] = %d, fd[1] = %d", list->piping.pipe_fd[0], list->piping.pipe_fd[1]);
+// 			printf("pipe fd[0] = %d, fd[1] = %d", list->piping.pipe_fd[0],
+//				list->piping.pipe_fd[1]);
 // 		}
 // 		if (list->type == heredoc)
 // 		{
