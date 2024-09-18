@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 01:18:55 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/18 00:10:28 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/19 01:15:31 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,15 @@ int	do_minishell_because_norm(t_data *data)
 	}
 	free(line);
 	return (0);
+}
+
+void	write_error_msg(char *str1, char *str2, char *str3)
+{
+	if (str1)
+		write(2, str1, ft_strlen(str1));
+	if (str2)
+		write(2, str2, ft_strlen(str2));
+	if (str3)
+		write(2, str3, ft_strlen(str3));
+	return ;
 }
