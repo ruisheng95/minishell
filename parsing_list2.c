@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:29:51 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 00:27:08 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/19 01:46:20 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ int	handle_redir_input_token(t_node *newnode, t_tokens **token)
 		newnode->redir_in.fd = open(newnode->redir_in.in_file, O_RDONLY);
 		if (newnode->redir_in.fd == -1)
 		{
-			error_str(2, newnode->redir_in.in_file);
-			return (-1);
+			return (check_invalid_for_redir_input(newnode->redir_in.in_file));
 		}
 		*token = (*token)->next->next;
 	}
@@ -42,6 +41,12 @@ int	handle_redir_out_append_token(t_node *newnode, t_tokens **token)
 		newnode->redir_out.outfile = (*token)->next->token;
 		newnode->redir_out.fd = open(newnode->redir_out.outfile,
 				O_WRONLY | O_CREAT | O_APPEND, 0777);
+		if (newnode->redir_out.fd == -1)
+		{
+			write_error_msg("Error: ", newnode->redir_out.outfile,
+				": Permission denied\n");
+			return (-1);
+		}
 		*token = (*token)->next->next;
 	}
 	else
@@ -60,6 +65,12 @@ int	handle_redir_out_overwrite_token(t_node *newnode, t_tokens **token)
 		newnode->redir_out.outfile = (*token)->next->token;
 		newnode->redir_out.fd = open(newnode->redir_out.outfile,
 				O_WRONLY | O_TRUNC | O_CREAT, 0777);
+		if (newnode->redir_out.fd == -1)
+		{
+			write_error_msg("Error: ", newnode->redir_out.outfile,
+				": Permission denied\n");
+			return (-1);
+		}
 		*token = (*token)->next->next;
 	}
 	else

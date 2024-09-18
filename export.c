@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 17:18:56 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 00:15:16 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/19 01:17:42 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int	export_valid_check(char *str)
 	if (ft_isdigit(str[0]) == 1 || check_str(str) != 0 || str[0] == '=')
 	{
 		if (check_str(str) != 2)
-			printf("Error: export: '%s': not a valid identifier\n", str);
+			write_error_msg("Error: export: '",
+				str, "': not a valid identifier\n");
 		if (check_str(str) == 2 && ft_isdigit(str[0]) == 0)
 			return (2);
 		return (1);

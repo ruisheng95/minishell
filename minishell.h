@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 10:26:15 by rng               #+#    #+#             */
-/*   Updated: 2024/09/18 00:10:41 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/19 02:00:57 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 # include <limits.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <dirent.h>
+
 # define STRING 1
 // # define OPERATOR 2
 # define PIPE 5
@@ -140,6 +142,7 @@ void		free_2d_array(char **str);
 void		print_2d_array(char **cmd);
 int			exit_process(char **arg, t_data *data);
 int			set_terminos_echo(int enable);
+int			check_invalid_for_redir_input(char *infile);
 
 //utils2
 void		increment_shell_lvl(t_data *data);
@@ -150,6 +153,7 @@ int			waitpid_and_get_exit_status(pid_t pid);
 //utils3
 int			change_exit_code(t_data *data, int code);
 void		init_data_struct(t_data *data, char **envp);
+void		write_error_msg(char *str1, char *str2, char *str3);
 
 //free
 void		free_t_tokens(t_tokens *obj);

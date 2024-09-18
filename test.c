@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:43:29 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 23:43:31 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/19 02:01:06 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,41 +16,26 @@
 // #include <sys/types.h>
 // #include <sys/wait.h>
 
-// int main() 
-// {
-//     pid_t pid = fork();
+// #include <stdio.h>
+// #include <dirent.h>
 
-//     if (pid == -1)
-// 	{
-//         perror("fork failed");
-//         exit(EXIT_FAILURE);
-//     }
-// 	else if (pid == 0) 
-// 	{
-//         // Child process
-//         char *cmd = "/bin/cat";
-//         char *args[] = { "cat", "INVALID", NULL };
-//         char *envp[] = { NULL };
+// int main() {
+//     DIR *dir;
+//     struct dirent *entry;
 
-//         if (execve(cmd, args, envp) == -1) {
-//             perror("execve failed");
-//             exit(EXIT_FAILURE);
-//         }
-//     } 
-// 	else 
-// 	{
-//         int status = 0;
-//         waitpid(pid, &status, 0);
-
-//         if (WIFEXITED(status)) 
-// 		{
-//             printf("Child exited with status %d\n", WEXITSTATUS(status));
-//         } 
-// 		else 
-// 		{
-//             printf("Child did not exit successfully\n");
-//         }
+//     // Open the directory
+//     dir = opendir(".");
+//     if (dir == NULL) {
+//         perror("opendir");
+//         return 1;
 //     }
 
+//     // Read and print directory entries
+//     while ((entry = readdir(dir)) != NULL) {
+//         printf("%s\n", entry->d_name);
+//     }
+
+//     // Close the directory
+//     closedir(dir);
 //     return 0;
 // }

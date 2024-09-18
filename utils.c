@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
+/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:08:07 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 21:55:08 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/19 01:59:28 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,31 @@ int	waitpid_and_get_exit_status(pid_t pid)
 		return (WEXITSTATUS(status));
 	else
 		return (0);
+}
+
+int	check_invalid_for_redir_input(char *infile)
+{
+	DIR				*dir;
+	struct dirent	*entry;
+
+	dir = opendir(".");
+	if (dir == NULL)
+	{
+		perror("opendir");
+		return (-1);
+	}
+	entry = readdir(dir);
+	while (entry != NULL)
+	{
+		if (ft_strcmp(entry->d_name, infile) == 0)
+		{
+			write_error_msg("Error: ", infile, ": Permission denied\n");
+			closedir(dir);
+			return (-1);
+		}
+		entry = readdir(dir);
+	}
+	write_error_msg("Error: ", infile, ": No such file or directory\n");
+	closedir(dir);
+	return (-1);
 }
