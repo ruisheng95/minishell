@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 10:26:15 by rng               #+#    #+#             */
-/*   Updated: 2024/09/16 01:20:47 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:10:41 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void		change_env_pwd(t_data *data);
 int			waitpid_and_get_exit_status(pid_t pid);
 
 //utils3
-int			change_exit_code(t_data *data);
+int			change_exit_code(t_data *data, int code);
 void		init_data_struct(t_data *data, char **envp);
 
 //free

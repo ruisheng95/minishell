@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_list2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 18:11:48 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 00:10:27 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/18 07:45:10 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,25 @@ void	make_command_list_heredoc(t_cmd_list **head,
 	if (!*head)
 		*head = heredoc_node;
 	*lastnode = heredoc_node;
+}
+
+void	print_cmd_list(t_cmd_list *list)
+{
+	t_cmd_list	*templist;
+	int			i;
+
+	templist = list;
+	while (templist && templist->cmd)
+	{
+		i = 0;
+		while (templist->cmd[i])
+		{
+			printf("|:%s:|", templist->cmd[i]);
+			i++;
+		}
+		printf("|outfd = %d|", templist->out_fd);
+		printf("|infd = %d|", templist->in_fd);
+		printf("\n");
+		templist = templist->next;
+	}
 }

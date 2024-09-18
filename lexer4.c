@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 21:49:14 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 00:14:50 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/18 09:32:23 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,10 @@ int	check_valid_list(t_tokens *list)
 		temp = temp->next;
 	}
 	return (0);
+}
+
+void	cleanup_failed_lexer_helper3(t_lexing *lexer)
+{
+	lexer->res[lexer->j] = NULL;
+	free_2d_array(lexer->res);
 }

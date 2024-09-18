@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_list.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 17:53:53 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 00:09:55 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/18 07:44:39 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,23 +117,6 @@ t_cmd_list	*make_command_list(t_node *list)
 	return (head);
 }
 
-// void	print_cmd_list(t_cmd_list *list)
-// {
-// 	t_cmd_list	*templist = list;
-// 	while(templist && templist->cmd)
-// 	{
-// 		int i = 0;
-// 		while(templist->cmd[i])
-// 		{
-// 			printf("|:%s:|", templist->cmd[i]);
-// 			i++;
-// 		}
-// 		printf("|outfd = %d|", templist->out_fd);
-// 		printf("|infd = %d|", templist->in_fd);
-// 		printf("\n");
-// 		templist = templist->next;
-// 	}
-// }
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_tokens *list;

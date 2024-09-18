@@ -6,7 +6,7 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:37:04 by rng               #+#    #+#             */
-/*   Updated: 2024/09/17 23:24:25 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/18 09:35:25 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	print_cmd_list(t_cmd_list *list);
 void	close_non_std_fd(int ignore_fd_1, int ignore_fd_2);
 void	waitpid_and_check_exit_status(int *exit_status, t_cmd_list	*templist);
 int		do_minishell_because_norm(t_data *data);
+// void	print_cmd_list(t_cmd_list *list);
 
 void	signal_handler(int sig)
 {
@@ -73,15 +74,15 @@ int	run(char *line, t_data *data)
 	data->tokens = lexer(line, data);
 	signal(SIGINT, SIG_IGN);
 	if (data->tokens == NULL)
-		return (change_exit_code(data));
+		return (change_exit_code(data, 0));
 	list = process_tokens(data);
 	if (!list)
 		return (1);
 	if (check_valid_list(list) == 1)
-		return (change_exit_code(data));
+		return (change_exit_code(data, 1));
 	data->instr_list = make_final_list(list);
 	if (data->instr_list == NULL)
-		return (change_exit_code(data));
+		return (change_exit_code(data, 1));
 	data->instr_list = make_final_list_heredoc(data->instr_list);
 	if (data->instr_list != NULL)
 		data->exit_code = the_real_actual_main(data);
@@ -101,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal(SIGINT, signal_handler);
 		set_terminos_echo(0);
-		if (do_minishell_because_norm(&data))
+		if (do_minishell_because_norm(&data) == -1)
 			break ;
 	}
 	set_terminos_echo(1);

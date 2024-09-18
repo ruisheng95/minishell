@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 00:15:18 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/16 01:31:45 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/18 09:09:09 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ void	free_t_tokens(t_tokens *obj)
 	{
 		temp_node = node;
 		node = node->next;
-		if (temp_node->type == COMMAND || temp_node->type == ARGUMENTS)
-			free(temp_node->token);
+		free(temp_node->token);
 		free(temp_node);
 	}
 }

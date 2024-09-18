@@ -6,7 +6,7 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 01:18:55 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/17 23:21:54 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/18 00:10:28 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	run(char *line, t_data *data);
 
-int	change_exit_code(t_data *data)
+int	change_exit_code(t_data *data, int code)
 {
-	data->exit_code = 1;
+	data->exit_code = code;
 	return (1);
 }
 

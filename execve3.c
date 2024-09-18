@@ -6,11 +6,12 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 00:37:25 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/17 22:57:29 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/18 00:42:19 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <errno.h>
 
 void	prepare_fd(t_cmd_list *templist, t_data *data);
 
@@ -50,5 +51,7 @@ void	prepare_fd_and_signal(t_cmd_list *templist, t_data *data)
 void	execve_error(void)
 {
 	perror("execve: ");
+	if (errno == 2)
+		exit(127);
 	exit (126);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:45:55 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 15:48:07 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/18 08:49:53 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char	**unset_array(char **env, char *str)
 		}
 		i++;
 	}
+	free(s);
 	tempenv[j] = NULL;
 	return (tempenv);
 }

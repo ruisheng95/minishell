@@ -6,11 +6,13 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:56:22 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 22:05:23 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/18 09:33:03 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	cleanup_failed_lexer_helper3(t_lexing *lexer);
 
 char	**lexer(char *line, t_data *data)
 {
@@ -20,7 +22,7 @@ char	**lexer(char *line, t_data *data)
 		return (NULL);
 	if (init_lexer_struct(&lexer, data, line) == 1)
 		return (NULL);
-	while (lexer.line[lexer.i])
+	while (lexer.line[lexer.i] && lexer.line[lexer.i] != '#')
 	{
 		while (lexer.line[lexer.i] == ' ')
 			lexer.i++;
@@ -33,7 +35,7 @@ char	**lexer(char *line, t_data *data)
 		else
 		{
 			if (lexer_helper3(&lexer) == -1)
-				return (NULL);
+				return (cleanup_failed_lexer_helper3(&lexer), NULL);
 		}
 		lexer.j++;
 	}
@@ -57,7 +59,7 @@ t_tokens	*init_token_list(t_data *data)
 		if (ft_strcmp(data->tokens[i], "$EMPTY") != 0)
 		{
 			newnode = malloc(sizeof(t_tokens));
-			newnode->token = data->tokens[i];
+			newnode->token = ft_strdup(data->tokens[i]);
 			newnode->next = NULL;
 			newnode->prev = last_node;
 			if (!list)

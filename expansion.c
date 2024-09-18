@@ -6,7 +6,7 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 15:51:35 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/15 22:05:12 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/18 09:36:50 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,17 @@ char	*expand_string(char *line, t_data *data)
 void	expansion(t_tokens *list, t_data *data)
 {
 	t_tokens	*templist;
+	char		*tempptr;
 
 	templist = list;
 	while (templist)
 	{
 		if (templist->type == STRING)
+		{
+			tempptr = templist->token;
 			templist->token = expand_string(templist->token, data);
+			free(tempptr);
+		}
 		templist = templist->next;
 	}
 }

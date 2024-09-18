@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 21:56:01 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/13 22:06:41 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/18 00:17:55 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	lexer_helper3(t_lexing *lexer)
 {
 	while (lexer->line[lexer->i] && lexer->line[lexer->i] != ' '
 		&& lexer->line[lexer->i] != '|' && lexer->line[lexer->i] != '>'
-		&& lexer->line[lexer->i] != '<')
+		&& lexer->line[lexer->i] != '<' && lexer->line[lexer->i] != '#')
 	{
 		if (lexer->line[lexer->i] == '\'')
 		{
