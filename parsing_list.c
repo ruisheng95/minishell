@@ -6,7 +6,7 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 23:20:59 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/17 23:11:40 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/20 22:53:03 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_node	*make_final_list(t_tokens *tokens)
 		if (!newnode)
 			return (NULL);
 		if (handle_token_type(newnode, &token) == -1)
-			return (NULL);
+			return (free_t_node(list), free(newnode), NULL);
 		add_node_to_list(&list, &last_node, newnode);
 	}
 	return (list);

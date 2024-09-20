@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 01:18:55 by ethanlim          #+#    #+#             */
-/*   Updated: 2024/09/19 01:15:31 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/20 22:51:42 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	init_data_struct(t_data *data, char **envp)
 	data->saved_in_fd = dup(0);
 	data->saved_out_fd = dup(1);
 	data->exit_code = 0;
+	data->instr_list = 0;
 }
 
 void	waitpid_and_check_exit_status(int *exit_status, t_cmd_list	*templist)

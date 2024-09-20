@@ -6,7 +6,7 @@
 /*   By: rng <rng@student.42kl.edu.my>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 20:37:04 by rng               #+#    #+#             */
-/*   Updated: 2024/09/18 09:35:25 by rng              ###   ########.fr       */
+/*   Updated: 2024/09/20 22:48:18 by rng              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ int	run(char *line, t_data *data)
 	if (!list)
 		return (1);
 	if (check_valid_list(list) == 1)
-		return (change_exit_code(data, 1));
+		return (cleanup(data, list), change_exit_code(data, 1));
 	data->instr_list = make_final_list(list);
 	if (data->instr_list == NULL)
-		return (change_exit_code(data, 1));
+		return (cleanup(data, list), change_exit_code(data, 1));
 	data->instr_list = make_final_list_heredoc(data->instr_list);
 	if (data->instr_list != NULL)
 		data->exit_code = the_real_actual_main(data);
