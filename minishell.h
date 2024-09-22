@@ -6,7 +6,7 @@
 /*   By: ethanlim <ethanlim@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 10:26:15 by rng               #+#    #+#             */
-/*   Updated: 2024/09/19 02:00:57 by ethanlim         ###   ########.fr       */
+/*   Updated: 2024/09/21 17:55:39 by ethanlim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,4 +246,6 @@ t_cmd_list	*make_command_list(t_node *list);
 void		make_command_list_heredoc(t_cmd_list **head,
 				t_cmd_list	**lastnode, t_cmd_list **newnode, char *limiter);
 char		**get_heredoc_cmd(char *lim);
+void		print_cmd_list(t_cmd_list *list);
+
 #endif

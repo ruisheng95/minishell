@@ -10,3 +10,4 @@ infile
 minishell_tester
 notes.txt
 test.c
+rl_redisplay_line.c
